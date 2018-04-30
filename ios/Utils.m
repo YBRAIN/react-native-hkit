@@ -1,0 +1,327 @@
+//
+//  Utils.m
+//  RNHkit
+//
+//  Created by HoJun Lee on 2018. 4. 4..
+//  Copyright © 2018년 Facebook. All rights reserved.
+//
+
+#import "Utils.h"
+
+@implementation RNHkit (Utils)
+
+#pragma mark - Utilities
+
++ (NSDate *)parseISO8601DateFromString:(NSString *)date {
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormatter.locale = posix;
+    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSSZ";
+    return [dateFormatter dateFromString:date];
+}
+
++ (NSString *)buildISO8601StringFromDate:(NSDate *)date {
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormatter.locale = posix;
+    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSSZ";
+    return [dateFormatter stringFromDate:date];
+}
+
++ (NSPredicate *)predicateForSamplesToday {
+    NSDate *now = [NSDate date];
+    return [RNHkit predicateForSamplesOnDay:now];
+}
+
+
++ (NSPredicate *)predicateForSamplesOnDayFromTimestamp:(NSString *)timestamp {
+    NSDate *day = [RNHkit parseISO8601DateFromString:timestamp];
+    return [RNHkit predicateForSamplesOnDay:day];
+}
+
+
++ (NSPredicate *)predicateForSamplesOnDay:(NSDate *)date {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *startDate = [calendar startOfDayForDate:date];
+    NSDate *endDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:startDate options:0];
+    return [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+}
+
+
++ (NSPredicate *)predicateForSamplesBetweenDates:(NSDate *)startDate endDate:(NSDate *)endDate {
+    return [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+}
+
+
++ (double)doubleValueFromOptions:(NSDictionary *)options {
+    double value = [[options objectForKey:@"value"] doubleValue];
+    return value;
+}
+
+
++ (NSDate *)dateFromOptions:(NSDictionary *)options {
+    NSString *dateString = [options objectForKey:@"date"];
+    NSDate *date;
+    if(dateString != nil){
+        date = [RNHkit parseISO8601DateFromString:dateString];
+    }
+    return date;
+}
+
+
++ (NSDate *)dateFromOptionsDefaultNow:(NSDictionary *)options {
+    NSString *dateString = [options objectForKey:@"date"];
+    if(dateString != nil){
+        NSDate *date = [RNHkit parseISO8601DateFromString:dateString];
+        if(date == nil){
+            // probably not a good idea... should return an error or just the null pointer
+            date = [NSDate date];
+        }
+        return date;
+    }
+    NSDate *now = [NSDate date];
+    return now;
+}
+
+
++ (NSDate *)startDateFromOptions:(NSDictionary *)options {
+    NSString *dateString = [options objectForKey:@"startDate"];
+    NSDate *date;
+    if(dateString != nil){
+        date = [RNHkit parseISO8601DateFromString:dateString];
+        return date;
+    }
+    return date;
+}
+
+
++ (NSDate *)endDateFromOptions:(NSDictionary *)options {
+    NSString *dateString = [options objectForKey:@"endDate"];
+    NSDate *date;
+    if(dateString != nil){
+        date = [RNHkit parseISO8601DateFromString:dateString];
+    }
+    return date;
+}
+
+
++ (NSDate *)endDateFromOptionsDefaultNow:(NSDictionary *)options {
+    NSString *dateString = [options objectForKey:@"endDate"];
+    NSDate *date;
+    if(dateString != nil){
+        date = [RNHkit parseISO8601DateFromString:dateString];
+        return date;
+    }
+    if(date == nil){
+        date = [NSDate date];
+    }
+    return date;
+}
+
++ (HKUnit *)hkUnitFromOptions:(NSDictionary *)options {
+    NSString *unitString = [options objectForKey:@"unit"];
+    HKUnit *theUnit;
+    
+    if([unitString isEqualToString:@"gram"]){
+        theUnit = [HKUnit gramUnit];
+    }
+    if([unitString isEqualToString:@"pound"]){
+        theUnit = [HKUnit poundUnit];
+    }
+    if([unitString isEqualToString:@"meter"]){
+        theUnit = [HKUnit meterUnit];
+    }
+    if([unitString isEqualToString:@"mile"]){
+        theUnit = [HKUnit mileUnit];
+    }
+    if([unitString isEqualToString:@"inch"]){
+        theUnit = [HKUnit inchUnit];
+    }
+    if([unitString isEqualToString:@"foot"]){
+        theUnit = [HKUnit footUnit];
+    }
+    if([unitString isEqualToString:@"second"]){
+        theUnit = [HKUnit secondUnit];
+    }
+    if([unitString isEqualToString:@"minute"]){
+        theUnit = [HKUnit minuteUnit];
+    }
+    if([unitString isEqualToString:@"hour"]){
+        theUnit = [HKUnit hourUnit];
+    }
+    if([unitString isEqualToString:@"day"]){
+        theUnit = [HKUnit dayUnit];
+    }
+    if([unitString isEqualToString:@"joule"]){
+        theUnit = [HKUnit jouleUnit];
+    }
+    if([unitString isEqualToString:@"calorie"]){
+        theUnit = [HKUnit calorieUnit];
+    }
+    if([unitString isEqualToString:@"count"]){
+        theUnit = [HKUnit countUnit];
+    }
+    if([unitString isEqualToString:@"percent"]){
+        theUnit = [HKUnit percentUnit];
+    }
+    return theUnit;
+}
+
+
++ (HKUnit *)hkUnitFromOptions:(NSDictionary *)options key:(NSString *)key withDefault:(HKUnit *)defaultValue {
+    NSString *unitString = [options objectForKey:key];
+    HKUnit *theUnit = [self hkUnitFromOptions:options];
+    
+    if([unitString isEqualToString:@"gram"]){
+        theUnit = [HKUnit gramUnit];
+    }
+    if([unitString isEqualToString:@"pound"]){
+        theUnit = [HKUnit poundUnit];
+    }
+    if([unitString isEqualToString:@"meter"]){
+        theUnit = [HKUnit meterUnit];
+    }
+    if([unitString isEqualToString:@"inch"]){
+        theUnit = [HKUnit inchUnit];
+    }
+    if([unitString isEqualToString:@"mile"]){
+        theUnit = [HKUnit mileUnit];
+    }
+    if([unitString isEqualToString:@"foot"]){
+        theUnit = [HKUnit footUnit];
+    }
+    if([unitString isEqualToString:@"second"]){
+        theUnit = [HKUnit secondUnit];
+    }
+    if([unitString isEqualToString:@"minute"]){
+        theUnit = [HKUnit minuteUnit];
+    }
+    if([unitString isEqualToString:@"hour"]){
+        theUnit = [HKUnit hourUnit];
+    }
+    if([unitString isEqualToString:@"day"]){
+        theUnit = [HKUnit dayUnit];
+    }
+    if([unitString isEqualToString:@"joule"]){
+        theUnit = [HKUnit jouleUnit];
+    }
+    if([unitString isEqualToString:@"calorie"]){
+        theUnit = [HKUnit calorieUnit];
+    }
+    if([unitString isEqualToString:@"count"]){
+        theUnit = [HKUnit countUnit];
+    }
+    if([unitString isEqualToString:@"percent"]){
+        theUnit = [HKUnit percentUnit];
+    }
+    if([unitString isEqualToString:@"bpm"]){
+        HKUnit *count = [HKUnit countUnit];
+        HKUnit *minute = [HKUnit minuteUnit];
+        
+        theUnit = [count unitDividedByUnit:minute];
+    }
+    if([unitString isEqualToString:@"fahrenheit"]){
+        theUnit = [HKUnit degreeFahrenheitUnit];
+    }
+    if([unitString isEqualToString:@"celsius"]){
+        theUnit = [HKUnit degreeCelsiusUnit];
+    }
+    if([unitString isEqualToString:@"mmhg"]){
+        theUnit = [HKUnit millimeterOfMercuryUnit];
+    }
+    if([unitString isEqualToString:@"mmolPerL"]){
+        theUnit = [[HKUnit moleUnitWithMetricPrefix:HKMetricPrefixMilli molarMass:HKUnitMolarMassBloodGlucose] unitDividedByUnit:[HKUnit literUnit]];
+    }
+    if([unitString isEqualToString:@"mgPerdL"]){
+        theUnit = [HKUnit unitFromString:@"mg/dL"];
+    }
+    
+    if(theUnit == nil){
+        theUnit = defaultValue;
+    }
+    
+    return theUnit;
+}
+
+
++ (NSUInteger)uintFromOptions:(NSDictionary *)options key:(NSString *)key withDefault:(NSUInteger)defaultValue {
+    NSUInteger val;
+    NSNumber *num = [options objectForKey:key];
+    if(num != nil){
+        val = [num unsignedIntValue];
+    } else {
+        val = defaultValue;
+    }
+    return val;
+}
+
+
++ (double)doubleFromOptions:(NSDictionary *)options key:(NSString *)key withDefault:(double)defaultValue {
+    double val;
+    NSNumber *num = [options objectForKey:key];
+    if(num != nil){
+        val = [num doubleValue];
+    } else {
+        val = defaultValue;
+    }
+    return val;
+}
+
+
++ (NSDate *)dateFromOptions:(NSDictionary *)options key:(NSString *)key withDefault:(NSDate *)defaultValue {
+    NSString *dateString = [options objectForKey:key];
+    NSDate *date;
+    if(dateString != nil){
+        date = [RNHkit parseISO8601DateFromString:dateString];
+    } else {
+        date = defaultValue;
+    }
+    return date;
+}
+
+
++ (NSString *)stringFromOptions:(NSDictionary *)options key:(NSString *)key withDefault:(NSString *)defaultValue {
+    NSString *str = [options objectForKey:key];
+    if(str == nil){
+        str = defaultValue;
+    }
+    return str;
+}
+
+
++ (bool)boolFromOptions:(NSDictionary *)options key:(NSString *)key withDefault:(bool)defaultValue {
+    NSNumber *num = [options objectForKey:key];
+    if(num == nil){
+        return defaultValue;
+    }
+    return [num boolValue];
+}
+
++ (NSString*)jsonStringFromDictionary:(NSDictionary *)dic {
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:&error];
+    if (!jsonData) {
+        NSLog(@"jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
+        return @"{}";
+    } else {
+        return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+}
+
++ (NSString*)jsonStringFromArray:(NSArray *)array {
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:&error];
+    
+    if (!jsonData) {
+        NSLog(@"jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
+        return @"[]";
+    } else {
+        return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+}
+
+@end
