@@ -1,4 +1,4 @@
-//@flow
+// @flow
 
 import { NativeModules } from 'react-native';
 import { Permissions } from './src/Constants/Permissions'
@@ -14,137 +14,97 @@ let HealthKit = Object.assign({}, RNHkit, {
     }
 });
 
-const healthKitOptions = {
-    permissions: {
-        read: [
-            PERMS.DateOfBirth,
-            PERMS.Height,
-            PERMS.Weight,
-
-            PERMS.BodyMass,
-            PERMS.BodyMassIndex,
-            PERMS.BodyFatPercentage,
-            PERMS.LeanBodyMass,
-            PERMS.Steps,
-            PERMS.StepCount,
-            PERMS.DistanceCycling,
-            PERMS.DistanceWalkingRunning,
-            PERMS.BasalEnergyBurned,
-            PERMS.ActiveEnergyBurned,
-            PERMS.FlightsClimbed,
-            PERMS.NikeFuel,
-            PERMS.AppleExerciseTime,
-            PERMS.DietaryEnergy,
-            PERMS.HeartRate,
-            PERMS.BodyTemperature,
-            PERMS.BloodGlucose,
-            PERMS.BloodPressureSystolic,
-            PERMS.BloodPressureDiastolic,
-            PERMS.RespiratoryRate,
-            PERMS.SleepAnalysis,
-            PERMS.MindfulSession,
-        ],
-        write: []
-    }
+const readOption = {
+    "unit": "HeartRate",
+    "limit": 100,
+    "ascending": false,
+    "startDate": "",
+    "endDate": ""
 };
 
 /**
  * Entry point of module
  */
-class AHKit {
-    constructor () {
-        HealthKit..initHealthKit(
-            (options: Object),
-            (err: string, results: Object) => {
-                if (err) {
-                    console.log("error initializing Healthkit: ", err);
-                    return;
-                }
-            }
-        );
-    }
-
-}
 const AKWrapperClient = {
-    getDateOfBirth(readOption: String): Promise<void> {
-        return AppleHealthKit.getDateOfBirth(readOption)
+    async getDateOfBirth(readOption: JSON): Promise<void> {
+        return HealthKit.getDateOfBirth(readOption)
     },
 
-    getLatestHeight(readOption: String): Promise<void> {
-        return AppleHealthKit.getLatestHeight(readOption)
+    async getLatestHeight(readOption: JSON): Promise<void> {
+        return HealthKit.getLatestHeight(readOption)
     },
 
-    getHeightSamples(readOption: String): Promise<void> {
-        return AppleHealthKit.getHeightSamples(readOption)
+    async getHeightSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getHeightSamples(readOption)
     },
 
-    getLatestWeight(readOption: String): Promise<void> {
-        return AppleHealthKit.getLatestWeight(readOption)
+    async getLatestWeight(readOption: JSON): Promise<void> {
+        return HealthKit.getLatestWeight(readOption)
     },
 
-    getWeightSamples(readOption: String): Promise<void> {
-        return AppleHealthKit.getWeightSamples(readOption)
+    async getWeightSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getWeightSamples(readOption)
     },
 
 
-    getBiologicalSex(readOption: String): Promise<void > {
-        return AppleHealthKit.getBiologicalSex(readOption);
+    async getBiologicalSex(readOption: JSON): Promise<void > {
+        return HealthKit.getBiologicalSex(readOption);
     },
 
-    getBloodGlucoseSamples(readOption: String): Promise<void> {
-        return AppleHealthKit.getBloodGlucoseSamples(readOption);
+    async getBloodGlucoseSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getBloodGlucoseSamples(readOption);
     },
 
-    getBloodPressureSamples(readOption: String): Promise<void> {
-        return AppleHealthKit.getBloodPressureSamples(readOption);
+    async getBloodPressureSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getBloodPressureSamples(readOption);
     },
 
-    getBodyTemperatureSamples(readOption: String): Promise<void> {
-        return AppleHealthKit.getBodyTemperatureSamples(readOption);
+    async getBodyTemperatureSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getBodyTemperatureSamples(readOption);
     },
 
-    getDailyStepCountSamples(readOption: String): Promise<void> {
-        return AppleHealthKit.getDailyStepCountSamples(readOption);
+    async getDailyStepCountSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getDailyStepCountSamples(readOption);
     },
 
-    getDistanceCycling(readOption: String): Promise<void> {
-        return AppleHealthKit.getDistanceCycling(readOption);
+    async getDistanceCycling(readOption: JSON): Promise<void> {
+        return HealthKit.getDistanceCycling(readOption);
     },
 
-    getDistanceWalkingRunning(readOption: String): Promise<void> {
-        return AppleHealthKit.getDistanceWalkingRunning(readOption);
+    async getDistanceWalkingRunning(readOption: JSON): Promise<void> {
+        return HealthKit.getDistanceWalkingRunning(readOption);
     },
 
-    getFlightsClimbed(readOption: String): Promise<void> {
-        return AppleHealthKit.getFlightsClimbed(readOption);
+    async getFlightsClimbed(readOption: JSON): Promise<void> {
+        return HealthKit.getFlightsClimbed(readOption);
     },
 
-    getHeartRateSamples(readOption: String): Promise<void> {
-        return AppleHealthKit.getHeartRateSamples(readOption);
+    async getHeartRateSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getHeartRateSamples(readOption);
     },
 
-    getLatestBmi(readOption: String): Promise<void> {
-        return AppleHealthKit.getLatestBmi(readOption);
+    async getLatestBmi(readOption: JSON): Promise<void> {
+        return HealthKit.getLatestBmi(readOption);
     },
 
-    getLatestBodyFatPercentage(readOption: String): Promise<void> {
-        return AppleHealthKit.getLatestBodyFatPercentage(readOption);
+    async getLatestBodyFatPercentage(readOption: JSON): Promise<void> {
+        return HealthKit.getLatestBodyFatPercentage(readOption);
     },
 
-    getLatestLeanBodyMass(readOption: String): Promise<void> {
-        return AppleHealthKit.getLatestLeanBodyMass(readOption);
+    async getLatestLeanBodyMass(readOption: JSON): Promise<void> {
+        return HealthKit.getLatestLeanBodyMass(readOption);
     },
 
-    getRespiratoryRateSamples(readOption: String): Promise<void> {
-        return AppleHealthKit.getRespiratoryRateSamples(readOption);
+    async getRespiratoryRateSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getRespiratoryRateSamples(readOption);
     },
 
-    getSleepSamples(readOption: String): Promise<void> {
-        return AppleHealthKit.getSleepSamples(readOption);
+    async getSleepSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getSleepSamples(readOption);
     },
 
-    getStepCount(readOption: String): Promise<void> {
-        return AppleHealthKit.getStepCount(readOption);
+    async getStepCount(readOption: JSON): Promise<void> {
+        return HealthKit.getStepCount(readOption);
     },
 
 };
@@ -152,7 +112,7 @@ const AKWrapperClient = {
 export default {
     AKClient: AKWrapperClient,
 
-    async getAllActivityDatas(): Promise<void> {
+    async getAllActivityDatas(): Promise<Array> {
         var results = [];
         Object.keys(AKWrapperClient).forEach((method, index) => {
             const result = AKWrapperClient[method];
@@ -160,7 +120,7 @@ export default {
                 results.append(result);
             }
         })
-        // return results;
+        return results;
     },
 };
 
@@ -174,4 +134,12 @@ export default {
 //
 //     });
 
-module.exports = HealthKit;
+// HealthKit.initHealthKit((options: Object), (err: string, results: Object) => {
+//         if (err) {
+//             console.log("error initializing Healthkit: ", err);
+//             return;
+//         }
+//     }
+// );
+
+// module.exports = HealthKit;

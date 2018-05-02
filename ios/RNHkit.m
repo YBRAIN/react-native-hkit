@@ -13,17 +13,15 @@
 
 RCT_EXPORT_MODULE(RNHkit);
 
-RCT_EXPORT_METHOD(isAvailable:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
-{
+RCT_REMAP_METHOD(isAvailable, isAvailable:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     BOOL isAvailable = NO;
     if ([HKHealthStore isHealthDataAvailable]) {
         isAvailable = YES;
     }
-    callback(@[[NSNull null], @(isAvailable)]);
+    resolve(@(isAvailable));
 }
 
-
-RCT_EXPORT_METHOD(initHealthKit:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
+RCT_REMAP_METHOD(initHealthKit:(NSDictionary *)input, initHealthKit:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     self.hkStore = [[HKHealthStore alloc] init];
     
@@ -46,73 +44,67 @@ RCT_EXPORT_METHOD(initHealthKit:(NSDictionary *)input callback:(RCTResponseSende
                 writeDataTypes = writePerms;
             }
         } else {
-            callback(@[RCTMakeError(@"permissions must be provided in the initialization options", nil, nil)]);
+            reject(@"init fail", @"permissions must be provided in the initialization options", nil);
             return;
         }
         
         // make sure at least 1 read or write permission is provided
         if(!writeDataTypes && !readDataTypes){
-            callback(@[RCTMakeError(@"at least 1 read or write permission must be set in options.permissions", nil, nil)]);
+            reject(@"init fail", @"permissions must be provided in the initialization options", nil);
             return;
         }
         
         [self.hkStore requestAuthorizationToShareTypes:writeDataTypes readTypes:readDataTypes completion:^(BOOL success, NSError *error) {
             if (!success) {
                 NSString *errMsg = [NSString stringWithFormat:@"Error with HealthKit authorization: %@", error];
-                callback(@[RCTMakeError(errMsg, nil, nil)]);
+                reject(@"init fail", errMsg, error);
                 return;
             } else {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    callback(@[[NSNull null], @true]);
+                    resolve(@true);
                 });
             }
         }];
     } else {
-        callback(@[RCTMakeError(@"HealthKit data is not available", nil, nil)]);
+        reject(@"init fail", @"permissions must be provided in the initialization options", nil);
     }
 }
 
-RCT_EXPORT_METHOD(sendRequestForPermission:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
-{
-    if (![HKHealthStore isHealthDataAvailable]) {
-        callback(@[RCTMakeError(@"isHealthDataAvailable fail", nil, nil)]);
-        return;
-    } else {
-        NSDictionary *permissions = [input objectForKey:@"permissions"];
-        if(permissions != nil) {
-            NSSet *writeDataTypes = [self getReadPermsFromOptions:[permissions objectForKey:@"read"]];
-            NSSet *readDataTypes = [self getWritePermsFromOptions:[permissions objectForKey:@"write"]];
-            // make sure at least 1 read or write permission is provided
-            if(!writeDataTypes && !readDataTypes){
-                callback(@[RCTMakeError(@"at least 1 read or write permission must be set in options.permissions", nil, nil)]);
-                return;
-            }
-            self.hkStore = [[HKHealthStore alloc] init];
-            [self.hkStore requestAuthorizationToShareTypes:writeDataTypes readTypes:readDataTypes completion:^(BOOL success, NSError *error) {
-                if (!success) {
-                    NSString *errMsg = [NSString stringWithFormat:@"Error with HealthKit authorization: %@", error];
-                    callback(@[RCTMakeError(errMsg, nil, nil)]);
-                    return;
-                } else {
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                        callback(@[[NSNull null], @true]);
-                    });
-                }
-            }];
-        } else {
-            callback(@[RCTMakeError(@"permissions must be provided in the initialization options", nil, nil)]);
-            return;
-        }
-    }
-}
-
-RCT_EXPORT_METHOD(getAllActivityDatas:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
+RCT_REMAP_METHOD(sendRequestForPermission:(NSDictionary *)input, sendRequestForPermission:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     if (!self.hkStore) {
         self.hkStore = [[HKHealthStore alloc] init];
     }
-    [self getAllActivityDatas:input callback:callback];
+    if (![HKHealthStore isHealthDataAvailable]) {
+        reject(@"init fail", @"permissions must be provided in the initialization options", nil);
+        return;
+    } else {
+        NSDictionary *permissions = [input objectForKey:@"permissions"];
+        if (permissions == nil) {
+            reject(@"init fail", @"permissions must be provided in the initialization options", nil);
+            return;
+        }
+        NSSet *writeDataTypes = [self getReadPermsFromOptions:[permissions objectForKey:@"read"]];
+        NSSet *readDataTypes = [self getWritePermsFromOptions:[permissions objectForKey:@"write"]];
+        // make sure at least 1 read or write permission is provided
+        if(!writeDataTypes && !readDataTypes){
+            reject(@"init fail", @"permissions must be provided in the initialization options", nil);
+            return;
+        }
+        [self.hkStore requestAuthorizationToShareTypes:writeDataTypes readTypes:readDataTypes completion:^(BOOL success, NSError *error) {
+            if (!success) {
+                NSString *errMsg = [NSString stringWithFormat:@"Error with HealthKit authorization: %@", error];
+                reject(@"init fail", errMsg, error);
+                return;
+            } else {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    resolve(@true);
+                });
+            }
+        }];
+    }
 }
+
 
 // Characteristic
 RCT_REMAP_METHOD(getBiologicalSex, getBiologicalSexWithResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
@@ -122,18 +114,10 @@ RCT_REMAP_METHOD(getBiologicalSex, getBiologicalSexWithResolver:(RCTPromiseResol
     NSString *value = nil;
     
     switch (bioSex.biologicalSex) {
-        case HKBiologicalSexNotSet:
-            value = @"unknown";
-            break;
-        case HKBiologicalSexFemale:
-            value = @"female";
-            break;
-        case HKBiologicalSexMale:
-            value = @"male";
-            break;
-        case HKBiologicalSexOther:
-            value = @"other";
-            break;
+        case HKBiologicalSexNotSet:     value = @"unknown"; break;
+        case HKBiologicalSexFemale:     value = @"female";  break;
+        case HKBiologicalSexMale:       value = @"male";    break;
+        case HKBiologicalSexOther:      value = @"other";   break;
     }
     
     if(value == nil) {
@@ -184,33 +168,28 @@ RCT_REMAP_METHOD(getBloodType, getBloodTypeWithResolver:(RCTPromiseResolveBlock)
     }
 }
 
+/*
+ FitzpatrickSkin
+ TypeI 햇볕에 항상 쉽게 화상을 입히고 볕에 타지 않는 하얀 피부.
+ TypeII 쉽게 화상을 입으며 최소한의 탄력있는 흰색 피부.
+ TypeIII 적당히 화상을 입히고 균일하게 태우는 밝은 갈색 피부.
+ TypeIV Beige-olive, 가볍게 태닝 한 피부. 최소한의 화상과 적당히 탄.
+ TypeV 거의 화상을 입지 않고 무미건조 한 갈색 피부.
+ TypeVI 결코 화상을 입지 않고 검은 색 피부에 검은 갈색의 피부.
+ */
 RCT_REMAP_METHOD(getFitzpatrickSkin, getFitzpatrickSkinWithResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSError *error;
     HKFitzpatrickSkinTypeObject *skin = [self.hkStore fitzpatrickSkinTypeWithError:&error];
     NSString *value = nil;
     switch (skin.skinType) {
-        case HKFitzpatrickSkinTypeNotSet:
-            value = @"NotSet";
-            break;
-        case HKFitzpatrickSkinTypeI:
-            value = @"White";
-            break;
-        case HKFitzpatrickSkinTypeII:
-            value = @"Beige";
-            break;
-        case HKFitzpatrickSkinTypeIII:
-            value = @"LightBrown";
-            break;
-        case HKFitzpatrickSkinTypeIV:
-            value = @"MediumBrown";
-            break;
-        case HKFitzpatrickSkinTypeV:
-            value = @"DarkBrown";
-            break;
-        case HKFitzpatrickSkinTypeVI:
-            value = @"Black";
-            break;
+        case HKFitzpatrickSkinTypeNotSet:   value = @"NotSet";      break;
+        case HKFitzpatrickSkinTypeI:        value = @"White";       break;
+        case HKFitzpatrickSkinTypeII:       value = @"Beige";       break;
+        case HKFitzpatrickSkinTypeIII:      value = @"LightBrown";  break;
+        case HKFitzpatrickSkinTypeIV:       value = @"MediumBrown"; break;
+        case HKFitzpatrickSkinTypeV:        value = @"DarkBrown";   break;
+        case HKFitzpatrickSkinTypeVI:       value = @"Black";       break;
     }
     if(value == nil) {
         NSLog(@"error getting FitzpatrickSkin: %@", error);
@@ -244,6 +223,79 @@ RCT_REMAP_METHOD(getWheelchairUse, getWheelchairUseWithResolver:(RCTPromiseResol
     } else {
         resolve(value);
     }
+}
+
+RCT_REMAP_METHOD(getBloodGlucoseSamples:(NSDictionary *)input, getBloodGlucoseSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    return [self getBloodGlucoseSamples:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getHeartRateSamples:(NSDictionary *)input, getHeartRateSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getHeartRateSamples:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getBodyTemperatureSamples:(NSDictionary *)input, getBodyTemperatureSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getBodyTemperatureSamples:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getBloodPressureSamples:(NSDictionary *)input, getBloodPressureSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getBloodPressureSamples:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getRespiratoryRateSamples:(NSDictionary *)input, getRespiratoryRateSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getRespiratoryRateSamples:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getLatestWeight:(NSDictionary *)input, getLatestWeight:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getLatestWeight:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getWeightSamples:(NSDictionary *)input, getWeightSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getWeightSamples:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getLatestBodyMassIndex:(NSDictionary *)input, getLatestBodyMassIndex:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getLatestBodyMassIndex:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getLatestHeight:(NSDictionary *)input, getLatestHeight:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getLatestHeight:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getHeightSamples:(NSDictionary *)input, getHeightSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self  getHeightSamples:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getLatestBodyFatPercentage:(NSDictionary *)input, getLatestBodyFatPercentage:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getLatestBodyFatPercentage:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getLatestLeanBodyMass:(NSDictionary *)input, getLatestLeanBodyMass:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getLatestLeanBodyMass:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getStepCountOnDay:(NSDictionary *)input, getStepCountOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getStepCountOnDay:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getDailyStepSamples:(NSDictionary *)input, getDailyStepSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getDailyStepSamples:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getDistanceWalkingRunningOnDay:(NSDictionary *)input, getDistanceWalkingRunningOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getDistanceWalkingRunningOnDay:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getDistanceCyclingOnDay:(NSDictionary *)input, getDistanceCyclingOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getDistanceCyclingOnDay:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getFlightsClimbedOnDay:(NSDictionary *)input, getFlightsClimbedOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getFlightsClimbedOnDay:input Resolver:resolve rejecter:reject];
+}
+
+RCT_REMAP_METHOD(getSleepSamples:(NSDictionary *)input, getSleepSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    return [self getSleepSamples:input Resolver:resolve rejecter:reject];
 }
 
 @end
