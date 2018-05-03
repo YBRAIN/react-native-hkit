@@ -109,7 +109,7 @@ const AKWrapperClient = {
 
 };
 
-export default {
+export {
     AKClient: AKWrapperClient,
 
     async getAllActivityDatas(): Promise<Array> {
@@ -142,4 +142,4 @@ export default {
 //     }
 // );
 
-// module.exports = HealthKit;
+module.exports = HealthKit;
