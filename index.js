@@ -109,20 +109,9 @@ const AKWrapperClient = {
 
 };
 
-export {
-    AKClient: AKWrapperClient,
-
-    async getAllActivityDatas(): Promise<Array> {
-        var results = [];
-        Object.keys(AKWrapperClient).forEach((method, index) => {
-            const result = AKWrapperClient[method];
-            if(result) {
-                results.append(result);
-            }
-        })
-        return results;
-    },
-};
+// export  {
+//     AKClient: AKWrapperClient,
+// };
 
 // AppleHealthKit.initHealthKit(
 //     (options: Object),
