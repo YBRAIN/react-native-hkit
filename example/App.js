@@ -5,7 +5,7 @@
  */
 
 import React, { Component } from 'react';
-import HKit  from 'react-native-hkit';
+// import HKit  from 'react-native-hkit';
 
 import {
   Platform,
