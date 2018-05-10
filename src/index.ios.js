@@ -9,18 +9,16 @@ const HealthKit = NativeModules.hkit;
 /**
  * Entry point of module
  */
-export default {
-    Constants: {
-        Permissions: Permissions,
-        Units: Units,
-    },
+const AKClient = {
+    Permissions: Permissions,
+    Units: Units,
 
-    async isAvailable(): Promise<void> {
+    async isAvailable(): Promise<boolean> {
         return HealthKit.isAvailable();
     },
 
-    async requestForPermission(readOption: JSON): Promise<void> {
-        return HealthKit.requestForPermission(readOption);
+    async requestPermission(readOption: JSON): Promise<void> {
+        return HealthKit.requestPermission(readOption);
     },
 
 
@@ -107,4 +105,4 @@ export default {
 
 };
 
-// export default AKClient;
+export default AKClient;
