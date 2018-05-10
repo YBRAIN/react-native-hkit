@@ -5,23 +5,17 @@
 
 @implementation RNHkit
 @synthesize bridge = _bridge;
+RCT_EXPORT_MODULE(hkit);
 
-- (dispatch_queue_t)methodQueue
-{
-    return dispatch_get_main_queue();
-}
-
-RCT_EXPORT_MODULE(RNHkit);
-
-RCT_REMAP_METHOD(isAvailable, isAvailable:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(isAvailable:(RCTResponseSenderBlock)callback) {
     BOOL isAvailable = NO;
     if ([HKHealthStore isHealthDataAvailable]) {
         isAvailable = YES;
     }
-    resolve(@(isAvailable));
+    callback(@[[NSNull null], @(isAvailable)]);
 }
 
-RCT_REMAP_METHOD(initHealthKit:(NSDictionary *)input, initHealthKit:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_REMAP_METHOD(initHealthKit:(NSDictionary *)input, initHealthKit:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     self.hkStore = [[HKHealthStore alloc] init];
     
@@ -296,6 +290,11 @@ RCT_REMAP_METHOD(getFlightsClimbedOnDay:(NSDictionary *)input, getFlightsClimbed
 
 RCT_REMAP_METHOD(getSleepSamples:(NSDictionary *)input, getSleepSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getSleepSamples:input Resolver:resolve rejecter:reject];
+}
+
+- (dispatch_queue_t)methodQueue
+{
+    return dispatch_get_main_queue();
 }
 
 @end

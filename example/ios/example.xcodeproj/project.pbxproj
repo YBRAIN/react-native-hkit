@@ -62,9 +62,9 @@
 			remoteGlobalIDString = 832C81801AAF6DEF007FA2F7;
 			remoteInfo = RCTVibration;
 		};
-		0F50E64D2091CE6E0075AFA0 /* PBXContainerItemProxy */ = {
+		0FFC189720A291E0001DF8E5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 0DA3882231424C12B1BC27CF /* RNHkit.xcodeproj */;
+			containerPortal = 0FFC189320A291E0001DF8E5 /* RNHkit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNHkit;
@@ -302,7 +302,7 @@
 		00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTImage.xcodeproj; path = "../node_modules/react-native/Libraries/Image/RCTImage.xcodeproj"; sourceTree = "<group>"; };
 		00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTNetwork.xcodeproj; path = "../node_modules/react-native/Libraries/Network/RCTNetwork.xcodeproj"; sourceTree = "<group>"; };
 		00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVibration.xcodeproj; path = "../node_modules/react-native/Libraries/Vibration/RCTVibration.xcodeproj"; sourceTree = "<group>"; };
-		0DA3882231424C12B1BC27CF /* RNHkit.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNHkit.xcodeproj; path = "../node_modules/react-native-hkit/ios/RNHkit.xcodeproj"; sourceTree = "<group>"; };
+		0FFC189320A291E0001DF8E5 /* RNHkit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNHkit.xcodeproj; path = ../../ios/RNHkit.xcodeproj; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -388,20 +388,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		0F50E6252091CE6E0075AFA0 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				0F50E64E2091CE6E0075AFA0 /* libRNHkit.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		0FD8036B2091CA7C00D3608E /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
 				A0F6499FCFC74006A1BE48AE /* libRNHkit.a */,
 			);
 			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		0FFC189420A291E0001DF8E5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0FFC189820A291E0001DF8E5 /* libRNHkit.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		139105B71AF99BAD00B5F7CC /* Products */ = {
@@ -490,6 +490,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0FFC189320A291E0001DF8E5 /* RNHkit.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -502,7 +503,6 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
-				0DA3882231424C12B1BC27CF /* RNHkit.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -643,8 +643,8 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = 0F50E6252091CE6E0075AFA0 /* Products */;
-					ProjectRef = 0DA3882231424C12B1BC27CF /* RNHkit.xcodeproj */;
+					ProductGroup = 0FFC189420A291E0001DF8E5 /* Products */;
+					ProjectRef = 0FFC189320A291E0001DF8E5 /* RNHkit.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -690,11 +690,11 @@
 			remoteRef = 00C302E31ABCB9EE00DB3ED1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		0F50E64E2091CE6E0075AFA0 /* libRNHkit.a */ = {
+		0FFC189820A291E0001DF8E5 /* libRNHkit.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNHkit.a;
-			remoteRef = 0F50E64D2091CE6E0075AFA0 /* PBXContainerItemProxy */;
+			remoteRef = 0FFC189720A291E0001DF8E5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		139105C11AF99BAD00B5F7CC /* libRCTSettings.a */ = {

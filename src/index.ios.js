@@ -1,9 +1,10 @@
 // @flow
 
-const { AppleHealthKit } = require('react-native').NativeModules;
+import { NativeModules } from 'react-native';
+import { Permissions } from './Constants/Permissions'
+import { Units } from './Constants/Units'
 
-import { Permissions } from './src/Constants/Permissions'
-import { Units } from './src/Constants/Units'
+const AppleHealthKit = NativeModules;
 
 const HealthKit = Object.assign({}, AppleHealthKit, {
     Constants: {
@@ -15,8 +16,6 @@ const HealthKit = Object.assign({}, AppleHealthKit, {
 export default HealthKit
 module.exports = HealthKit;
 
-
-//
 // const readOption = {
 //     "unit": "HeartRate",
 //     "limit": 100,
@@ -125,11 +124,3 @@ module.exports = HealthKit;
 //         }
 //
 //     });
-
-// HealthKit.initHealthKit((options: Object), (err: string, results: Object) => {
-//         if (err) {
-//             console.log("error initializing Healthkit: ", err);
-//             return;
-//         }
-//     }
-// );
