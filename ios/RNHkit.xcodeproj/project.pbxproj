@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0F50E65420934D850075AFA0 /* Results.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F50E65320934D850075AFA0 /* Results.m */; };
 		0FD8035B2091C2CE00D3608E /* HKMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD803542091C2CD00D3608E /* HKMethods.m */; };
 		0FD8035C2091C2CE00D3608E /* Queries.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD803552091C2CE00D3608E /* Queries.m */; };
 		0FD8035D2091C2CE00D3608E /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD803582091C2CE00D3608E /* Utils.m */; };
@@ -28,8 +27,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0F50E65220934D850075AFA0 /* Results.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Results.h; sourceTree = "<group>"; };
-		0F50E65320934D850075AFA0 /* Results.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Results.m; sourceTree = "<group>"; };
 		0FD803532091C2CD00D3608E /* Queries.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Queries.h; sourceTree = "<group>"; };
 		0FD803542091C2CD00D3608E /* HKMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKMethods.m; sourceTree = "<group>"; };
 		0FD803552091C2CE00D3608E /* Queries.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Queries.m; sourceTree = "<group>"; };
@@ -69,8 +66,6 @@
 				B3E7B5891CC2AC0600A0062D /* RNHkit.m */,
 				0FD803562091C2CE00D3608E /* HKMethods.h */,
 				0FD803542091C2CD00D3608E /* HKMethods.m */,
-				0F50E65220934D850075AFA0 /* Results.h */,
-				0F50E65320934D850075AFA0 /* Results.m */,
 				0FD803532091C2CD00D3608E /* Queries.h */,
 				0FD803552091C2CE00D3608E /* Queries.m */,
 				0FD803592091C2CE00D3608E /* TypesAndPermissions.h */,
@@ -139,7 +134,6 @@
 			files = (
 				0FD8035C2091C2CE00D3608E /* Queries.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNHkit.m in Sources */,
-				0F50E65420934D850075AFA0 /* Results.m in Sources */,
 				0FD8035E2091C2CE00D3608E /* TypesAndPermissions.m in Sources */,
 				0FD8035B2091C2CE00D3608E /* HKMethods.m in Sources */,
 				0FD8035D2091C2CE00D3608E /* Utils.m in Sources */,

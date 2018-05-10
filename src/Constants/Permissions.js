@@ -1,6 +1,7 @@
 /**
  * Apple Health Permissions
  */
+/*
 export const Permissions = {
     DateOfBirth: 'DateOfBirth',
     BiologicalSex: 'BiologicalSex',
@@ -29,7 +30,7 @@ export const Permissions = {
     SleepAnalysis: 'SleepAnalysis',
     MindfulSession: 'MindfulSession',
 };
-/*
+*/
 export const Permissions = {
     ActiveEnergyBurned: "ActiveEnergyBurned",
     AppleExerciseTime: "AppleExerciseTime",
@@ -95,4 +96,3 @@ export const Permissions = {
     Steps: "Steps",
     Weight: "Weight"
 };
-*/
