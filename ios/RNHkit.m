@@ -19,7 +19,7 @@ RCT_REMAP_METHOD(isAvailable, isAvailable:(RCTPromiseResolveBlock)resolve reject
     }
 }
 
-RCT_REMAP_METHOD(requestForPermission:(NSDictionary *)input, requestForPermission:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_REMAP_METHOD(requestPermission:(NSDictionary *)input, requestPermission:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     if (!self.hkStore) {
         self.hkStore = [[HKHealthStore alloc] init];
