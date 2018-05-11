@@ -19,7 +19,7 @@ RCT_REMAP_METHOD(isAvailable, isAvailable:(RCTPromiseResolveBlock)resolve reject
     }
 }
 
-RCT_REMAP_METHOD(requestPermission:(NSDictionary *)input, requestPermission:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     if (!self.hkStore) {
         self.hkStore = [[HKHealthStore alloc] init];
@@ -174,76 +174,76 @@ RCT_REMAP_METHOD(getWheelchairUse, getWheelchairUseWithResolver:(RCTPromiseResol
     }
 }
 
-RCT_REMAP_METHOD(getBloodGlucoseSamples:(NSDictionary *)input, getBloodGlucoseSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getBloodGlucoseSamples, getBloodGlucoseSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     
     return [self getBloodGlucoseSamples:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getHeartRateSamples:(NSDictionary *)input, getHeartRateSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getHeartRateSamples, getHeartRateSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getHeartRateSamples:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getBodyTemperatureSamples:(NSDictionary *)input, getBodyTemperatureSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getBodyTemperatureSamples, getBodyTemperatureSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getBodyTemperatureSamples:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getBloodPressureSamples:(NSDictionary *)input, getBloodPressureSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getBloodPressureSamples, getBloodPressureSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getBloodPressureSamples:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getRespiratoryRateSamples:(NSDictionary *)input, getRespiratoryRateSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getRespiratoryRateSamples, getRespiratoryRateSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getRespiratoryRateSamples:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getLatestWeight:(NSDictionary *)input, getLatestWeight:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getLatestWeight, getLatestWeight:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getLatestWeight:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getWeightSamples:(NSDictionary *)input, getWeightSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getWeightSamples, getWeightSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getWeightSamples:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getLatestBodyMassIndex:(NSDictionary *)input, getLatestBodyMassIndex:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getLatestBodyMassIndex, getLatestBodyMassIndex:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getLatestBodyMassIndex:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getLatestHeight:(NSDictionary *)input, getLatestHeight:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getLatestHeight, getLatestHeight:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getLatestHeight:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getHeightSamples:(NSDictionary *)input, getHeightSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getHeightSamples, getHeightSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self  getHeightSamples:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getLatestBodyFatPercentage:(NSDictionary *)input, getLatestBodyFatPercentage:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getLatestBodyFatPercentage, getLatestBodyFatPercentage:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getLatestBodyFatPercentage:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getLatestLeanBodyMass:(NSDictionary *)input, getLatestLeanBodyMass:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getLatestLeanBodyMass, getLatestLeanBodyMass:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getLatestLeanBodyMass:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getStepCountOnDay:(NSDictionary *)input, getStepCountOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getStepCountOnDay, getStepCountOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getStepCountOnDay:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getDailyStepSamples:(NSDictionary *)input, getDailyStepSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getDailyStepSamples, getDailyStepSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getDailyStepSamples:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getDistanceWalkingRunningOnDay:(NSDictionary *)input, getDistanceWalkingRunningOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getDistanceWalkingRunningOnDay, getDistanceWalkingRunningOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getDistanceWalkingRunningOnDay:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getDistanceCyclingOnDay:(NSDictionary *)input, getDistanceCyclingOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getDistanceCyclingOnDay, getDistanceCyclingOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getDistanceCyclingOnDay:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getFlightsClimbedOnDay:(NSDictionary *)input, getFlightsClimbedOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getFlightsClimbedOnDay, getFlightsClimbedOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getFlightsClimbedOnDay:input Resolver:resolve rejecter:reject];
 }
 
-RCT_REMAP_METHOD(getSleepSamples:(NSDictionary *)input, getSleepSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getSleepSamples, getSleepSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     return [self getSleepSamples:input Resolver:resolve rejecter:reject];
 }
 
@@ -256,7 +256,7 @@ RCT_REMAP_METHOD(getSleepSamples:(NSDictionary *)input, getSleepSamples:(NSDicti
 
 /*
  
- RCT_REMAP_METHOD(initHealthKit:(NSDictionary *)input, initHealthKit:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+ RCT_REMAP_METHOD(initHealthKit, initHealthKit:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
  {
  self.hkStore = [[HKHealthStore alloc] init];
  
