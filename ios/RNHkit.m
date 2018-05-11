@@ -33,8 +33,10 @@ RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input Reso
             reject(@"init fail", @"permissions must be provided in the initialization options", nil);
             return;
         }
-        NSSet *writeDataTypes = [self getReadPermsFromOptions:[permissions objectForKey:@"read"]];
-        NSSet *readDataTypes = [self getWritePermsFromOptions:[permissions objectForKey:@"write"]];
+        NSArray *reads = [permissions objectForKey:@"read"];
+        NSArray *writes = [permissions objectForKey:@"write"];
+        NSSet *readDataTypes = [self getWritePermsFromOptions:reads];
+        NSSet *writeDataTypes = [self getReadPermsFromOptions:writes];
         // make sure at least 1 read or write permission is provided
         if(!writeDataTypes && !readDataTypes){
             reject(@"init fail", @"permissions must be provided in the initialization options", nil);
