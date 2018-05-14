@@ -177,7 +177,6 @@ RCT_REMAP_METHOD(getWheelchairUse, getWheelchairUseWithResolver:(RCTPromiseResol
 }
 
 RCT_REMAP_METHOD(getBloodGlucoseSamples, getBloodGlucoseSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    
     return [self getBloodGlucoseSamples:input Resolver:resolve rejecter:reject];
 }
 

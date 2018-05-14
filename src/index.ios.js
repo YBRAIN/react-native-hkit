@@ -37,50 +37,23 @@ export default {
     async getWheelchairUse(): Promise<void> {
         return HealthKit.getWheelchairUse();
     },
+    async getLatestHeight(): Promise<void> {
+        return HealthKit.getLatestHeight();
+    },
+    async getLatestWeight(): Promise<void> {
+        return HealthKit.getLatestWeight();
+    },
+    async getLatestBodyMassIndex(): Promise<void> {
+        return HealthKit.getLatestBodyMassIndex();
+    },
+    async getLatestLeanBodyMass(): Promise<void> {
+        return HealthKit.getLatestLeanBodyMass();
+    },
+    async getLatestBodyFatPercentage(): Promise<void> {
+        return HealthKit.getLatestBodyFatPercentage();
+    },
 
 
-    async getBloodGlucoseSamples(readOption: JSON): Promise<void> {
-        return HealthKit.getBloodGlucoseSamples(readOption);
-    },
-    async getHeartRateSamples(readOption: JSON): Promise<void> {
-        return HealthKit.getHeartRateSamples(readOption);
-    },
-    async getBodyTemperatureSamples(readOption: JSON): Promise<void> {
-        return HealthKit.getBodyTemperatureSamples(readOption);
-    },
-    async getBloodPressureSamples(readOption: JSON): Promise<void> {
-        return HealthKit.getBloodPressureSamples(readOption);
-    },
-    async getRespiratoryRateSamples(readOption: JSON): Promise<void> {
-        return HealthKit.getRespiratoryRateSamples(readOption);
-    },
-    async getLatestWeight(readOption: JSON): Promise<void> {
-        return HealthKit.getLatestWeight(readOption);
-    },
-    async getWeightSamples(readOption: JSON): Promise<void> {
-        return HealthKit.getWeightSamples(readOption);
-    },
-    async getLatestBodyMassIndex(readOption: JSON): Promise<void> {
-        return HealthKit.getLatestBodyMassIndex(readOption);
-    },
-    async getLatestHeight(readOption: JSON): Promise<void> {
-        return HealthKit.getLatestHeight(readOption);
-    },
-    async getHeightSamples(readOption: JSON): Promise<void> {
-        return HealthKit.getHeightSamples(readOption);
-    },
-    async getLatestBodyFatPercentage(readOption: JSON): Promise<void> {
-        return HealthKit.getLatestBodyFatPercentage(readOption);
-    },
-    async getLatestLeanBodyMass(readOption: JSON): Promise<void> {
-        return HealthKit.getLatestLeanBodyMass(readOption);
-    },
-    async getStepCountOnDay(readOption: JSON): Promise<void> {
-        return HealthKit.getStepCountOnDay(readOption);
-    },
-    async getDailyStepSamples(readOption: JSON): Promise<void> {
-        return HealthKit.getDailyStepSamples(readOption);
-    },
     async getDistanceWalkingRunningOnDay(readOption: JSON): Promise<void> {
         return HealthKit.getDistanceWalkingRunningOnDay(readOption);
     },
@@ -90,29 +63,39 @@ export default {
     async getFlightsClimbedOnDay(readOption: JSON): Promise<void> {
         return HealthKit.getFlightsClimbedOnDay(readOption);
     },
-
-
-
-    async getDailyStepCountSamples(readOption: JSON): Promise<void> {
-        return HealthKit.getDailyStepCountSamples(readOption);
+    async getStepCountOnDay(readOption: JSON): Promise<void> {
+        return HealthKit.getStepCountOnDay(readOption);
     },
 
-    async getDistanceCycling(readOption: JSON): Promise<void> {
-        return HealthKit.getDistanceCycling(readOption);
-    },
 
-    async getDistanceWalkingRunning(readOption: JSON): Promise<void> {
-        return HealthKit.getDistanceWalkingRunning(readOption);
+    async getHeightSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getHeightSamples(readOption);
     },
-
-    async getFlightsClimbed(readOption: JSON): Promise<void> {
-        return HealthKit.getFlightsClimbed(readOption);
+    async getWeightSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getWeightSamples(readOption);
     },
     async getSleepSamples(readOption: JSON): Promise<void> {
         return HealthKit.getSleepSamples(readOption);
     },
-    // async getStepCount(readOption: JSON): Promise<void> {
-    //     return HealthKit.getStepCount(readOption);
-    // },
+    async getDailyStepSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getDailyStepSamples(readOption);
+    },
+    async getHeartRateSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getHeartRateSamples(readOption);
+    },
+
+
+    async getBloodGlucoseSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getBloodGlucoseSamples(readOption);
+    },
+    async getBloodPressureSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getBloodPressureSamples(readOption);
+    },
+    async getRespiratoryRateSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getRespiratoryRateSamples(readOption);
+    },
+    async getBodyTemperatureSamples(readOption: JSON): Promise<void> {
+        return HealthKit.getBodyTemperatureSamples(readOption);
+    },
 
 };
