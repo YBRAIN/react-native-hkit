@@ -179,11 +179,11 @@ RCT_REMAP_METHOD(getWheelchairUse, getWheelchairUseWithResolver:(RCTPromiseResol
 
 // Lastst
 RCT_REMAP_METHOD(getLatestHeight, getLatestHeight:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    return [self getLatestHeightWithResolver:resolve rejecter:reject];
+    return [self getLatestHeight:resolve rejecter:reject];
 }
 
 RCT_REMAP_METHOD(getLatestWeight, getLatestWeight:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    return [self getLatestWeightWithResolver:resolve rejecter:reject];
+    return [self getLatestWeight:resolve rejecter:reject];
 }
 
 RCT_REMAP_METHOD(getLatestBodyMassIndex, getLatestBodyMassIndex:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
