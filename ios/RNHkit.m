@@ -5,6 +5,7 @@
 
 @implementation RNHkit
 @synthesize bridge = _bridge;
+
 RCT_EXPORT_MODULE(hkit);
 
 RCT_REMAP_METHOD(isAvailable, isAvailable:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
@@ -177,7 +178,6 @@ RCT_REMAP_METHOD(getWheelchairUse, getWheelchairUseWithResolver:(RCTPromiseResol
 }
 
 RCT_REMAP_METHOD(getBloodGlucoseSamples, getBloodGlucoseSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    
     return [self getBloodGlucoseSamples:input Resolver:resolve rejecter:reject];
 }
 
@@ -255,56 +255,3 @@ RCT_REMAP_METHOD(getSleepSamples, getSleepSamples:(NSDictionary *)input Resolver
 }
 
 @end
-
-/*
- 
- RCT_REMAP_METHOD(initHealthKit, initHealthKit:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
- {
- self.hkStore = [[HKHealthStore alloc] init];
- 
- if ([HKHealthStore isHealthDataAvailable]) {
- NSSet *writeDataTypes;
- NSSet *readDataTypes;
- 
- // get permissions from input object provided by JS options argument
- NSDictionary* permissions =[input objectForKey:@"permissions"];
- if(permissions != nil){
- NSArray* readPermsArray = [permissions objectForKey:@"read"];
- NSArray* writePermsArray = [permissions objectForKey:@"write"];
- NSSet* readPerms = [self getReadPermsFromOptions:readPermsArray];
- NSSet* writePerms = [self getWritePermsFromOptions:writePermsArray];
- 
- if(readPerms != nil) {
- readDataTypes = readPerms;
- }
- if(writePerms != nil) {
- writeDataTypes = writePerms;
- }
- } else {
- reject(@"init fail", @"permissions must be provided in the initialization options", nil);
- return;
- }
- 
- // make sure at least 1 read or write permission is provided
- if(!writeDataTypes && !readDataTypes){
- reject(@"init fail", @"permissions must be provided in the initialization options", nil);
- return;
- }
- 
- [self.hkStore requestAuthorizationToShareTypes:writeDataTypes readTypes:readDataTypes completion:^(BOOL success, NSError *error) {
- if (!success) {
- NSString *errMsg = [NSString stringWithFormat:@"Error with HealthKit authorization: %@", error];
- reject(@"init fail", errMsg, error);
- return;
- } else {
- dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
- resolve(@true);
- });
- }
- }];
- } else {
- reject(@"init fail", @"permissions must be provided in the initialization options", nil);
- }
- }
- 
- */

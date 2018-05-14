@@ -15,18 +15,25 @@
 // Results
 - (void)getBloodGlucoseSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
     HKQuantityType *bloodGlucoseType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodGlucose];
-    
     HKUnit *mmoLPerL = [[HKUnit moleUnitWithMetricPrefix:HKMetricPrefixMilli molarMass:HKUnitMolarMassBloodGlucose] unitDividedByUnit:[HKUnit literUnit]];
     
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input key:@"unit" withDefault:mmoLPerL];
-    NSUInteger limit = [RNHkit uintFromOptions:input key:@"limit" withDefault:HKObjectQueryNoLimit];
-    BOOL ascending = [RNHkit boolFromOptions:input key:@"ascending" withDefault:false];
-    NSDate *startDate = [RNHkit dateFromOptions:input key:@"startDate" withDefault:nil];
-    NSDate *endDate = [RNHkit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
+    NSString *strUnit = [input objectForKey:@"unit"];
+    NSNumber *numLimit = [input objectForKey:@"limit"];
+    NSNumber *numBool = [input objectForKey:@"ascending"];
+    
+    HKUnit *unit = strUnit != nil ? [HKUnit unitFromString:strUnit] : mmoLPerL;
+    NSUInteger limit = numLimit != nil ? [numLimit unsignedIntValue] : HKObjectQueryNoLimit;
+    BOOL ascending = numBool != nil ? [numBool boolValue] : false;
+    
+    NSString *strStartDate = [input objectForKey:@"startDate"];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[strStartDate doubleValue]];
     if(startDate == nil) {
         reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
+    NSString *strEndDate = [input objectForKey:@"endDate"];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:[strEndDate doubleValue]] : [NSDate new];
+    
     NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
     [self fetchQuantitySamplesOfType:bloodGlucoseType
@@ -49,18 +56,23 @@
 - (void)getHeartRateSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
     HKQuantityType *heartRateType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate];
     
-    HKUnit *count = [HKUnit countUnit];
-    HKUnit *minute = [HKUnit minuteUnit];
+    NSString *strUnit = [input objectForKey:@"unit"];
+    NSNumber *numLimit = [input objectForKey:@"limit"];
+    NSNumber *numBool = [input objectForKey:@"ascending"];
     
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input key:@"unit" withDefault:[count unitDividedByUnit:minute]];
-    NSUInteger limit = [RNHkit uintFromOptions:input key:@"limit" withDefault:HKObjectQueryNoLimit];
-    BOOL ascending = [RNHkit boolFromOptions:input key:@"ascending" withDefault:false];
-    NSDate *startDate = [RNHkit dateFromOptions:input key:@"startDate" withDefault:nil];
-    NSDate *endDate = [RNHkit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
-    if(startDate == nil){
-        reject(@"getHeartRateSamples", @"startDate is required in options", nil);
+    HKUnit *unit = strUnit != nil ? [HKUnit unitFromString:strUnit] : [[HKUnit countUnit] unitDividedByUnit:[HKUnit minuteUnit]];
+    NSUInteger limit = numLimit != nil ? [numLimit unsignedIntValue] : HKObjectQueryNoLimit;
+    BOOL ascending = numBool != nil ? [numBool boolValue] : false;
+    
+    NSString *strStartDate = [input objectForKey:@"startDate"];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[strStartDate doubleValue]];
+    if(startDate == nil) {
+        reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
+    NSString *strEndDate = [input objectForKey:@"endDate"];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:[strEndDate doubleValue]] : [NSDate new];
+    
     NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
     [self fetchQuantitySamplesOfType:heartRateType
@@ -84,15 +96,23 @@
 - (void)getBodyTemperatureSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
     HKQuantityType *bodyTemperatureType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyTemperature];
     
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input key:@"unit" withDefault:[HKUnit degreeCelsiusUnit]];
-    NSUInteger limit = [RNHkit uintFromOptions:input key:@"limit" withDefault:HKObjectQueryNoLimit];
-    BOOL ascending = [RNHkit boolFromOptions:input key:@"ascending" withDefault:false];
-    NSDate *startDate = [RNHkit dateFromOptions:input key:@"startDate" withDefault:nil];
-    NSDate *endDate = [RNHkit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
-    if(startDate == nil){
-        reject(@"getBodyTemperatureSamples", @"startDate is required in options", nil);
+    NSString *strUnit = [input objectForKey:@"unit"];
+    NSNumber *numLimit = [input objectForKey:@"limit"];
+    NSNumber *numBool = [input objectForKey:@"ascending"];
+    
+    HKUnit *unit = strUnit != nil ? [HKUnit unitFromString:strUnit] : [HKUnit degreeCelsiusUnit];
+    NSUInteger limit = numLimit != nil ? [numLimit unsignedIntValue] : HKObjectQueryNoLimit;
+    BOOL ascending = numBool != nil ? [numBool boolValue] : false;
+    
+    NSString *strStartDate = [input objectForKey:@"startDate"];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[strStartDate doubleValue]];
+    if(startDate == nil) {
+        reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
+    NSString *strEndDate = [input objectForKey:@"endDate"];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:[strEndDate doubleValue]] : [NSDate new];
+    
     NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
     [self fetchQuantitySamplesOfType:bodyTemperatureType
@@ -117,16 +137,23 @@
     HKQuantityType *systolicType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic];
     HKQuantityType *diastolicType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic];
     
+    NSString *strUnit = [input objectForKey:@"unit"];
+    NSNumber *numLimit = [input objectForKey:@"limit"];
+    NSNumber *numBool = [input objectForKey:@"ascending"];
     
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input key:@"unit" withDefault:[HKUnit millimeterOfMercuryUnit]];
-    NSUInteger limit = [RNHkit uintFromOptions:input key:@"limit" withDefault:HKObjectQueryNoLimit];
-    BOOL ascending = [RNHkit boolFromOptions:input key:@"ascending" withDefault:false];
-    NSDate *startDate = [RNHkit dateFromOptions:input key:@"startDate" withDefault:nil];
-    NSDate *endDate = [RNHkit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
-    if(startDate == nil){
-        reject(@"getBloodPressureSamples", @"startDate is required in options", nil);
+    HKUnit *unit = strUnit != nil ? [HKUnit unitFromString:strUnit] : [HKUnit millimeterOfMercuryUnit];
+    NSUInteger limit = numLimit != nil ? [numLimit unsignedIntValue] : HKObjectQueryNoLimit;
+    BOOL ascending = numBool != nil ? [numBool boolValue] : false;
+    
+    NSString *strStartDate = [input objectForKey:@"startDate"];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[strStartDate doubleValue]];
+    if(startDate == nil) {
+        reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
+    NSString *strEndDate = [input objectForKey:@"endDate"];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:[strEndDate doubleValue]] : [NSDate new];
+    
     NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
     [self fetchCorrelationSamplesOfType:bloodPressureCorrelationType
@@ -145,12 +172,13 @@
                                          HKQuantitySample *bloodPressureDiastolicValue = [bloodPressureValues objectsForType:diastolicType].anyObject;
                                          
                                          NSDictionary *elem = @{
-                                                                @"bloodPressureSystolicValue" : @([bloodPressureSystolicValue.quantity doubleValueForUnit:unit]),
-                                                                @"bloodPressureDiastolicValue" : @([bloodPressureDiastolicValue.quantity doubleValueForUnit:unit]),
+                                                                @"value": @{
+                                                                        @"bloodPressureSystolicValue" : @([bloodPressureSystolicValue.quantity doubleValueForUnit:unit]),
+                                                                        @"bloodPressureDiastolicValue" : @([bloodPressureDiastolicValue.quantity doubleValueForUnit:unit])
+                                                                        },
                                                                 @"startDate" : [sample valueForKey:@"startDate"],
                                                                 @"endDate" : [sample valueForKey:@"endDate"],
                                                                 };
-                                         
                                          [data addObject:elem];
                                      }
                                      
@@ -167,18 +195,23 @@
 - (void)getRespiratoryRateSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
     HKQuantityType *respiratoryRateType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierRespiratoryRate];
     
-    HKUnit *count = [HKUnit countUnit];
-    HKUnit *minute = [HKUnit minuteUnit];
+    NSString *strUnit = [input objectForKey:@"unit"];
+    NSNumber *numLimit = [input objectForKey:@"limit"];
+    NSNumber *numBool = [input objectForKey:@"ascending"];
     
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input key:@"unit" withDefault:[count unitDividedByUnit:minute]];
-    NSUInteger limit = [RNHkit uintFromOptions:input key:@"limit" withDefault:HKObjectQueryNoLimit];
-    BOOL ascending = [RNHkit boolFromOptions:input key:@"ascending" withDefault:false];
-    NSDate *startDate = [RNHkit dateFromOptions:input key:@"startDate" withDefault:nil];
-    NSDate *endDate = [RNHkit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
-    if(startDate == nil){
-        reject(@"getRespiratoryRateSamples", @"startDate is required in options", nil);
+    HKUnit *unit = strUnit != nil ? [HKUnit unitFromString:strUnit] : [[HKUnit countUnit] unitDividedByUnit:[HKUnit minuteUnit]];
+    NSUInteger limit = numLimit != nil ? [numLimit unsignedIntValue] : HKObjectQueryNoLimit;
+    BOOL ascending = numBool != nil ? [numBool boolValue] : false;
+    
+    NSString *strStartDate = [input objectForKey:@"startDate"];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[strStartDate doubleValue]];
+    if(startDate == nil) {
+        reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
+    NSString *strEndDate = [input objectForKey:@"endDate"];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:[strEndDate doubleValue]] : [NSDate new];
+    
     NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
     [self fetchQuantitySamplesOfType:respiratoryRateType
@@ -198,14 +231,154 @@
                           }];
 }
 
+- (void)getWeightSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
+    HKQuantityType *weightType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
+    
+    NSString *strUnit = [input objectForKey:@"unit"];
+    NSNumber *numLimit = [input objectForKey:@"limit"];
+    NSNumber *numBool = [input objectForKey:@"ascending"];
+    
+    HKUnit *unit = strUnit != nil ? [HKUnit unitFromString:strUnit] : [HKUnit gramUnitWithMetricPrefix:HKMetricPrefixKilo];
+    NSUInteger limit = numLimit != nil ? [numLimit unsignedIntValue] : HKObjectQueryNoLimit;
+    BOOL ascending = numBool != nil ? [numBool boolValue] : false;
+    
+    NSString *strStartDate = [input objectForKey:@"startDate"];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[strStartDate doubleValue]];
+    if(startDate == nil) {
+        reject(@"get blood glucose fail", @"startDate is required in options", nil);
+        return;
+    }
+    NSString *strEndDate = [input objectForKey:@"endDate"];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:[strEndDate doubleValue]] : [NSDate new];
+    
+    NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+    
+    [self fetchQuantitySamplesOfType:weightType
+                                unit:unit
+                           predicate:predicate
+                           ascending:ascending
+                               limit:limit
+                          completion:^(NSArray *results, NSError *error) {
+                              if(results){
+                                  resolve(results);
+                                  return;
+                              } else {
+                                  NSLog(@"error getting weight samples: %@", error);
+                                  reject(@"getWeightSamples", @"error getting weight samples", nil);
+                                  return;
+                              }
+                          }];
+}
+
+- (void)getHeightSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
+    HKQuantityType *heightType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight];
+    
+    NSString *strUnit = [input objectForKey:@"unit"];
+    NSNumber *numLimit = [input objectForKey:@"limit"];
+    NSNumber *numBool = [input objectForKey:@"ascending"];
+    
+    HKUnit *unit = strUnit != nil ? [HKUnit unitFromString:strUnit] : [HKUnit meterUnit];
+    NSUInteger limit = numLimit != nil ? [numLimit unsignedIntValue] : HKObjectQueryNoLimit;
+    BOOL ascending = numBool != nil ? [numBool boolValue] : false;
+    
+    NSString *strStartDate = [input objectForKey:@"startDate"];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[strStartDate doubleValue]];
+    if(startDate == nil) {
+        reject(@"get blood glucose fail", @"startDate is required in options", nil);
+        return;
+    }
+    NSString *strEndDate = [input objectForKey:@"endDate"];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:[strEndDate doubleValue]] : [NSDate new];
+    
+    NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+    
+    [self fetchQuantitySamplesOfType:heightType
+                                unit:unit
+                           predicate:predicate
+                           ascending:ascending
+                               limit:limit
+                          completion:^(NSArray *results, NSError *error) {
+                              if(results){
+                                  resolve(results);
+                                  return;
+                              } else {
+                                  NSLog(@"error getting height samples: %@", error);
+                                  reject(@"getHeightSamples", @"error getting height samples", error);
+                                  return;
+                              }
+                          }];
+}
+
+- (void)getDailyStepSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
+    
+    NSString *strUnit = [input objectForKey:@"unit"];
+    NSNumber *numLimit = [input objectForKey:@"limit"];
+    NSNumber *numBool = [input objectForKey:@"ascending"];
+    
+    HKUnit *unit = strUnit != nil ? [HKUnit unitFromString:strUnit] : [HKUnit countUnit];
+    NSUInteger limit = numLimit != nil ? [numLimit unsignedIntValue] : HKObjectQueryNoLimit;
+    BOOL ascending = numBool != nil ? [numBool boolValue] : false;
+    
+    NSString *strStartDate = [input objectForKey:@"startDate"];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[strStartDate doubleValue]];
+    if(startDate == nil) {
+        reject(@"get blood glucose fail", @"startDate is required in options", nil);
+        return;
+    }
+    NSString *strEndDate = [input objectForKey:@"endDate"];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:[strEndDate doubleValue]] : [NSDate new];
+    
+    HKQuantityType *stepCountType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
+    
+    [self fetchCumulativeSumStatisticsCollection:stepCountType
+                                            unit:unit
+                                       startDate:startDate
+                                         endDate:endDate
+                                       ascending:ascending
+                                           limit:limit
+                                      completion:^(NSArray *arr, NSError *error){
+                                          if (error != nil) {
+                                              NSLog(@"error with fetchCumulativeSumStatisticsCollection: %@", error);
+                                              reject(@"getDailyStepSamples", @"error with fetchCumulativeSumStatisticsCollection", error);
+                                              return;
+                                          }
+                                          resolve(arr);
+                                      }];
+}
+
+- (void)getSleepSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
+    NSString *strUnit = [input objectForKey:@"unit"];
+    NSNumber *numLimit = [input objectForKey:@"limit"];
+    
+    NSString *strStartDate = [input objectForKey:@"startDate"];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[strStartDate doubleValue]];
+    if(startDate == nil) {
+        reject(@"get blood glucose fail", @"startDate is required in options", nil);
+        return;
+    }
+    NSString *strEndDate = [input objectForKey:@"endDate"];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:[strEndDate doubleValue]] : [NSDate new];
+    
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+    
+    [self fetchSleepCategorySamplesForPredicate:predicate
+                                          limit:limit
+                                     completion:^(NSArray *results, NSError *error) {
+                                         if(results){
+                                             resolve(results);
+                                             return;
+                                         } else {
+                                             NSLog(@"error getting sleep samples: %@", error);
+                                             reject(@"getSleepSamples", @"error getting sleep samples", error);
+                                             return;
+                                         }
+                                     }];
+}
 
 - (void)getLatestWeight:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
     HKQuantityType *weightType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
     
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input];
-    if(unit == nil){
-        unit = [HKUnit poundUnit];
-    }
+    HKUnit *unit = [HKUnit gramUnitWithMetricPrefix:HKMetricPrefixKilo];
     
     [self fetchMostRecentQuantitySampleOfType:weightType
                                     predicate:nil
@@ -228,42 +401,6 @@
                                        }
                                    }];
 }
-
-
-- (void)getWeightSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
-    HKQuantityType *weightType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
-    
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input key:@"unit" withDefault:[HKUnit poundUnit]];
-    NSUInteger limit = [RNHkit uintFromOptions:input key:@"limit" withDefault:HKObjectQueryNoLimit];
-    BOOL ascending = [RNHkit boolFromOptions:input key:@"ascending" withDefault:false];
-    NSDate *startDate = [RNHkit dateFromOptions:input key:@"startDate" withDefault:nil];
-    NSDate *endDate = [RNHkit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
-    if(startDate == nil){
-        reject(@"getRespiratoryRateSamples", @"startDate is required in options", nil);
-        return;
-    }
-    NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
-    
-    [self fetchQuantitySamplesOfType:weightType
-                                unit:unit
-                           predicate:predicate
-                           ascending:ascending
-                               limit:limit
-                          completion:^(NSArray *results, NSError *error) {
-                              if(results){
-                                  resolve(results);
-                                  return;
-                              } else {
-                                  NSLog(@"error getting weight samples: %@", error);
-                                  reject(@"getWeightSamples", @"error getting weight samples", nil);
-                                  return;
-                              }
-                          }];
-}
-
-
-
-
 
 - (void)getLatestBodyMassIndex:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
     HKQuantityType *bmiType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMassIndex];
@@ -294,10 +431,7 @@
 - (void)getLatestHeight:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
     HKQuantityType *heightType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight];
     
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input];
-    if(unit == nil){
-        unit = [HKUnit inchUnit];
-    }
+    HKUnit *unit = [HKUnit meterUnit];
     
     [self fetchMostRecentQuantitySampleOfType:heightType
                                     predicate:nil
@@ -319,38 +453,6 @@
                                            resolve(response);
                                        }
                                    }];
-}
-
-
-- (void)getHeightSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
-    HKQuantityType *heightType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight];
-    
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input key:@"unit" withDefault:[HKUnit inchUnit]];
-    NSUInteger limit = [RNHkit uintFromOptions:input key:@"limit" withDefault:HKObjectQueryNoLimit];
-    BOOL ascending = [RNHkit boolFromOptions:input key:@"ascending" withDefault:false];
-    NSDate *startDate = [RNHkit dateFromOptions:input key:@"startDate" withDefault:nil];
-    NSDate *endDate = [RNHkit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
-    if(startDate == nil){
-        reject(@"getHeightSamples", @"startDate is required in options", nil);
-        return;
-    }
-    NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
-    
-    [self fetchQuantitySamplesOfType:heightType
-                                unit:unit
-                           predicate:predicate
-                           ascending:ascending
-                               limit:limit
-                          completion:^(NSArray *results, NSError *error) {
-                              if(results){
-                                  resolve(results);
-                                  return;
-                              } else {
-                                  NSLog(@"error getting height samples: %@", error);
-                                  reject(@"getHeightSamples", @"error getting height samples", error);
-                                  return;
-                              }
-                          }];
 }
 
 - (void)getLatestBodyFatPercentage:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
@@ -407,8 +509,6 @@
                                    }];
 }
 
-
-
 - (void)getStepCountOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
     NSDate *date = [RNHkit dateFromOptions:input key:@"date" withDefault:[NSDate date]];
     
@@ -440,38 +540,8 @@
                              }];
 }
 
-
-- (void)getDailyStepSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input key:@"unit" withDefault:[HKUnit countUnit]];
-    NSUInteger limit = [RNHkit uintFromOptions:input key:@"limit" withDefault:HKObjectQueryNoLimit];
-    BOOL ascending = [RNHkit boolFromOptions:input key:@"ascending" withDefault:false];
-    NSDate *startDate = [RNHkit dateFromOptions:input key:@"startDate" withDefault:nil];
-    NSDate *endDate = [RNHkit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
-    if(startDate == nil){
-        reject(@"getDailyStepSamples", @"startDate is required in options", nil);
-        return;
-    }
-    
-    HKQuantityType *stepCountType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
-    
-    [self fetchCumulativeSumStatisticsCollection:stepCountType
-                                            unit:unit
-                                       startDate:startDate
-                                         endDate:endDate
-                                       ascending:ascending
-                                           limit:limit
-                                      completion:^(NSArray *arr, NSError *error){
-                                          if (error != nil) {
-                                              NSLog(@"error with fetchCumulativeSumStatisticsCollection: %@", error);
-                                              reject(@"getDailyStepSamples", @"error with fetchCumulativeSumStatisticsCollection", error);
-                                              return;
-                                          }
-                                          resolve(arr);
-                                      }];
-}
-
 - (void)getDistanceWalkingRunningOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input key:@"unit" withDefault:[HKUnit meterUnit]];
+    HKUnit *unit = [HKUnit meterUnit];
     NSDate *date = [RNHkit dateFromOptions:input key:@"date" withDefault:[NSDate date]];
     
     HKQuantityType *quantityType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning];
@@ -493,7 +563,7 @@
 }
 
 - (void)getDistanceCyclingOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input key:@"unit" withDefault:[HKUnit meterUnit]];
+    HKUnit *unit = [HKUnit meterUnit];
     NSDate *date = [RNHkit dateFromOptions:input key:@"date" withDefault:[NSDate date]];
     
     HKQuantityType *quantityType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceCycling];
@@ -514,7 +584,6 @@
         resolve(response);
     }];
 }
-
 
 - (void)getFlightsClimbedOnDay:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
     HKUnit *unit = [HKUnit countUnit];
@@ -538,37 +607,12 @@
     }];
 }
 
-- (void)getSleepSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
-    NSDate *startDate = [RNHkit dateFromOptions:input key:@"startDate" withDefault:nil];
-    NSDate *endDate = [RNHkit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
-    if(startDate == nil){
-        reject(@"getSleepSamples", @"startDate is required in options", nil);
-        return;
-    }
-    
-    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
-    NSUInteger limit = [RNHkit uintFromOptions:input key:@"limit" withDefault:HKObjectQueryNoLimit];
-    
-    
-    [self fetchSleepCategorySamplesForPredicate:predicate
-                                          limit:limit
-                                     completion:^(NSArray *results, NSError *error) {
-                                         if(results){
-                                             resolve(results);
-                                             return;
-                                         } else {
-                                             NSLog(@"error getting sleep samples: %@", error);
-                                             reject(@"getSleepSamples", @"error getting sleep samples", error);
-                                             return;
-                                         }
-                                     }];
-}
 
 // save
 - (void)saveWeight:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback {
     double weight = [RNHkit doubleValueFromOptions:input];
     NSDate *sampleDate = [RNHkit dateFromOptionsDefaultNow:input];
-    HKUnit *unit = [RNHkit hkUnitFromOptions:input key:@"unit" withDefault:[HKUnit poundUnit]];
+    HKUnit *unit = [HKUnit gramUnitWithMetricPrefix:HKMetricPrefixKilo]
     
     HKQuantity *weightQuantity = [HKQuantity quantityWithUnit:unit doubleValue:weight];
     HKQuantityType *weightType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
@@ -609,7 +653,7 @@
     
     HKUnit *heightUnit = [RNHkit hkUnitFromOptions:input];
     if(heightUnit == nil){
-        heightUnit = [HKUnit inchUnit];
+        heightUnit = [HKUnit meterUnit];
     }
     
     HKQuantity *heightQuantity = [HKQuantity quantityWithUnit:heightUnit doubleValue:height];
