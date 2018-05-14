@@ -11,21 +11,6 @@
 @implementation RNHkit (Queries)
 
 // utils
-- (NSPredicate *)predicateForSamplesOnDay:(NSDate *)date {
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDate *startDate = [calendar startOfDayForDate:date];
-    NSDate *endDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:startDate options:0];
-    return [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
-}
-
-- (NSString *)buildISO8601StringFromDate:(NSDate *)date {
-    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
-    dateFormatter.locale = posix;
-    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSSZ";
-    return [dateFormatter stringFromDate:date];
-}
-
 + (NSString*)jsonStringFromDictionary:(NSDictionary *)dic {
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic
@@ -51,6 +36,21 @@
     } else {
         return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     }
+}
+
+- (NSPredicate *)predicateForSamplesOnDay:(NSDate *)date {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *startDate = [calendar startOfDayForDate:date];
+    NSDate *endDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:startDate options:0];
+    return [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+}
+
+- (NSString *)buildISO8601StringFromDate:(NSDate *)date {
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormatter.locale = posix;
+    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSSZ";
+    return [dateFormatter stringFromDate:date];
 }
 
 

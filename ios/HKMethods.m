@@ -724,7 +724,7 @@
     [self.hkStore saveObject:sample withCompletion:^(BOOL success, NSError *error) {
         if (!success) {
             NSLog(@"An error occured saving the step count sample %@. The error was: %@.", sample, error);
-            callback(@[RCTMakeError(@"An error occured saving the step count sample", error, nil)]);
+            reject(@"saveSteps", @"error saveSteps", error);
             return;
         }
         resolve(@(value));

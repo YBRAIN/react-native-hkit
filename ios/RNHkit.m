@@ -179,7 +179,27 @@ RCT_REMAP_METHOD(getWheelchairUse, getWheelchairUseWithResolver:(RCTPromiseResol
 
 // Lastst
 RCT_REMAP_METHOD(getLatestHeight, getLatestHeight:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    return [self getLatestHeight:resolve rejecter:reject];
+    HKQuantityType *heightType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight];
+    HKUnit *unit = [HKUnit meterUnit];
+    [self fetchMostRecentQuantitySampleOfType:heightType
+                                    predicate:nil
+                                   completion:^(HKQuantity *mostRecentQuantity, NSDate *startDate, NSDate *endDate, NSError *error) {
+                                       if (!mostRecentQuantity) {
+                                           NSLog(@"error getting latest height: %@", error);
+                                           reject(@"getLatestHeight", @"error getting latest height", error);
+                                       }
+                                       else {
+                                           // Determine the height in the required unit.
+                                           double height = [mostRecentQuantity doubleValueForUnit:unit];
+                                           NSDictionary *response = @{
+                                                                      @"value" : @(height),
+                                                                      @"startDate" : [self buildISO8601StringFromDate:startDate],
+                                                                      @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                                                      };
+                                           resolve(response);
+                                       }
+                                   }];
+//    return [self getLatestHeight:resolve rejecter:reject];
 }
 
 RCT_REMAP_METHOD(getLatestWeight, getLatestWeight:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
