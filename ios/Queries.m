@@ -6,10 +6,55 @@
 //  Copyright © 2018년 Facebook. All rights reserved.
 //
 
-#import "Utils.h"
 #import "Queries.h"
 
 @implementation RNHkit (Queries)
+
+// utils
+- (NSPredicate *)predicateForSamplesOnDay:(NSDate *)date {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *startDate = [calendar startOfDayForDate:date];
+    NSDate *endDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:startDate options:0];
+    return [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+}
+
+- (NSString *)buildISO8601StringFromDate:(NSDate *)date {
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormatter.locale = posix;
+    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSSZ";
+    return [dateFormatter stringFromDate:date];
+}
+
++ (NSString*)jsonStringFromDictionary:(NSDictionary *)dic {
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:&error];
+    if (!jsonData) {
+        NSLog(@"jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
+        return @"{}";
+    } else {
+        return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+}
+
++ (NSString*)jsonStringFromArray:(NSArray *)array {
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:&error];
+    
+    if (!jsonData) {
+        NSLog(@"jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
+        return @"[]";
+    } else {
+        return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+}
+
+
+// implementation
 
 - (void)fetchMostRecentQuantitySampleOfType:(HKQuantityType *)quantityType
                                   predicate:(NSPredicate *)predicate
@@ -71,8 +116,8 @@
                     HKQuantity *quantity = sample.quantity;
                     double value = [quantity doubleValueForUnit:unit];
                     
-                    NSString *startDateString = [RNHkit buildISO8601StringFromDate:sample.startDate];
-                    NSString *endDateString = [RNHkit buildISO8601StringFromDate:sample.endDate];
+                    NSString *startDateString = [self buildISO8601StringFromDate:sample.startDate];
+                    NSString *endDateString = [self buildISO8601StringFromDate:sample.endDate];
                     
                     NSDictionary *elem = @{
                                            @"value" : @(value),
@@ -128,8 +173,8 @@
                     // HKQuantity *quantity = sample.quantity;
                     // double value = [quantity doubleValueForUnit:unit];
                     
-                    NSString *startDateString = [RNHkit buildISO8601StringFromDate:sample.startDate];
-                    NSString *endDateString = [RNHkit buildISO8601StringFromDate:sample.endDate];
+                    NSString *startDateString = [self buildISO8601StringFromDate:sample.startDate];
+                    NSString *endDateString = [self buildISO8601StringFromDate:sample.endDate];
                     
                     NSString *valueString;
                     
@@ -214,8 +259,8 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 for (HKCorrelation *sample in results) {
-                    NSString *startDateString = [RNHkit buildISO8601StringFromDate:sample.startDate];
-                    NSString *endDateString = [RNHkit buildISO8601StringFromDate:sample.endDate];
+                    NSString *startDateString = [self buildISO8601StringFromDate:sample.startDate];
+                    NSString *endDateString = [self buildISO8601StringFromDate:sample.endDate];
                     
                     NSDictionary *elem = @{
                                            @"correlation" : sample,
@@ -244,7 +289,7 @@
                                  unit:(HKUnit *)unit
                            completion:(void (^)(double, NSError *))completionHandler {
     
-    NSPredicate *predicate = [RNHkit predicateForSamplesToday];
+    NSPredicate *predicate = [self predicateForSamplesOnDay:[NSDate date]];
     HKStatisticsQuery *query = [[HKStatisticsQuery alloc] initWithQuantityType:quantityType
                                                        quantitySamplePredicate:predicate
                                                                        options:HKStatisticsOptionCumulativeSum
@@ -265,7 +310,7 @@
                                   day:(NSDate *)day
                            completion:(void (^)(double, NSDate *, NSDate *, NSError *))completionHandler {
     
-    NSPredicate *predicate = [RNHkit predicateForSamplesOnDay:day];
+    NSPredicate *predicate = [self predicateForSamplesOnDay:day];
     HKStatisticsQuery *query = [[HKStatisticsQuery alloc] initWithQuantityType:quantityType
                                                        quantitySamplePredicate:predicate
                                                                        options:HKStatisticsOptionCumulativeSum
@@ -323,7 +368,7 @@
                                            double value = [quantity doubleValueForUnit:[HKUnit countUnit]];
                                            NSLog(@"%@: %f", date, value);
                                            
-                                           NSString *dateString = [RNHkit buildISO8601StringFromDate:date];
+                                           NSString *dateString = [self buildISO8601StringFromDate:date];
                                            NSArray *elem = @[dateString, @(value)];
                                            [data addObject:elem];
                                        }
@@ -379,8 +424,8 @@
                                            NSDate *endDate = result.endDate;
                                            double value = [quantity doubleValueForUnit:unit];
                                            
-                                           NSString *startDateString = [RNHkit buildISO8601StringFromDate:startDate];
-                                           NSString *endDateString = [RNHkit buildISO8601StringFromDate:endDate];
+                                           NSString *startDateString = [self buildISO8601StringFromDate:startDate];
+                                           NSString *endDateString = [self buildISO8601StringFromDate:endDate];
                                            
                                            NSDictionary *elem = @{
                                                                   @"value" : @(value),

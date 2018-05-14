@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0FD8035B2091C2CE00D3608E /* HKMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD803542091C2CD00D3608E /* HKMethods.m */; };
 		0FD8035C2091C2CE00D3608E /* Queries.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD803552091C2CE00D3608E /* Queries.m */; };
-		0FD8035D2091C2CE00D3608E /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD803582091C2CE00D3608E /* Utils.m */; };
 		0FD8035E2091C2CE00D3608E /* TypesAndPermissions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8035A2091C2CE00D3608E /* TypesAndPermissions.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNHkit.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNHkit.m */; };
 /* End PBXBuildFile section */
@@ -31,8 +30,6 @@
 		0FD803542091C2CD00D3608E /* HKMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKMethods.m; sourceTree = "<group>"; };
 		0FD803552091C2CE00D3608E /* Queries.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Queries.m; sourceTree = "<group>"; };
 		0FD803562091C2CE00D3608E /* HKMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKMethods.h; sourceTree = "<group>"; };
-		0FD803572091C2CE00D3608E /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
-		0FD803582091C2CE00D3608E /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		0FD803592091C2CE00D3608E /* TypesAndPermissions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypesAndPermissions.h; sourceTree = "<group>"; };
 		0FD8035A2091C2CE00D3608E /* TypesAndPermissions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TypesAndPermissions.m; sourceTree = "<group>"; };
 		134814201AA4EA6300B7C361 /* libRNHkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNHkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,8 +67,6 @@
 				0FD803552091C2CE00D3608E /* Queries.m */,
 				0FD803592091C2CE00D3608E /* TypesAndPermissions.h */,
 				0FD8035A2091C2CE00D3608E /* TypesAndPermissions.m */,
-				0FD803572091C2CE00D3608E /* Utils.h */,
-				0FD803582091C2CE00D3608E /* Utils.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -136,7 +131,6 @@
 				B3E7B58A1CC2AC0600A0062D /* RNHkit.m in Sources */,
 				0FD8035E2091C2CE00D3608E /* TypesAndPermissions.m in Sources */,
 				0FD8035B2091C2CE00D3608E /* HKMethods.m in Sources */,
-				0FD8035D2091C2CE00D3608E /* Utils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
