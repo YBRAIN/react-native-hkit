@@ -347,8 +347,9 @@
 }
 
 - (void)getSleepSamples:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
-    NSString *strUnit = [input objectForKey:@"unit"];
+    
     NSNumber *numLimit = [input objectForKey:@"limit"];
+    NSUInteger limit = numLimit != nil ? [numLimit unsignedIntValue] : HKObjectQueryNoLimit;
     
     NSString *strStartDate = [input objectForKey:@"startDate"];
     NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[strStartDate doubleValue]];
@@ -612,7 +613,7 @@
 - (void)saveWeight:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback {
     double weight = [RNHkit doubleValueFromOptions:input];
     NSDate *sampleDate = [RNHkit dateFromOptionsDefaultNow:input];
-    HKUnit *unit = [HKUnit gramUnitWithMetricPrefix:HKMetricPrefixKilo]
+    HKUnit *unit = [HKUnit gramUnitWithMetricPrefix:HKMetricPrefixKilo];
     
     HKQuantity *weightQuantity = [HKQuantity quantityWithUnit:unit doubleValue:weight];
     HKQuantityType *weightType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
