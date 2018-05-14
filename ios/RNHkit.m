@@ -20,7 +20,7 @@ RCT_REMAP_METHOD(isAvailable, isAvailable:(RCTPromiseResolveBlock)resolve reject
     }
 }
 
-RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input Resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     if (!self.hkStore) {
         self.hkStore = [[HKHealthStore alloc] init];
@@ -59,7 +59,7 @@ RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input Reso
 
 
 // Characteristic
-RCT_REMAP_METHOD(getBiologicalSex, getBiologicalSexWithResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_REMAP_METHOD(getBiologicalSex, getBiologicalSex:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSError *error;
     HKBiologicalSexObject *bioSex = [self.hkStore biologicalSexWithError:&error];
@@ -80,7 +80,7 @@ RCT_REMAP_METHOD(getBiologicalSex, getBiologicalSexWithResolver:(RCTPromiseResol
     resolve(value);
 }
 
-RCT_REMAP_METHOD(getDateOfBirth, getDateOfBirthWithResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_REMAP_METHOD(getDateOfBirth, getDateOfBirth:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSError *error;
     NSDateComponents *dateOfBirth = [self.hkStore dateOfBirthComponentsWithError:&error];
@@ -95,7 +95,7 @@ RCT_REMAP_METHOD(getDateOfBirth, getDateOfBirthWithResolver:(RCTPromiseResolveBl
     resolve(value);
 }
 
-RCT_REMAP_METHOD(getBloodType, getBloodTypeWithResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_REMAP_METHOD(getBloodType, getBloodType:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSError *error;
     HKBloodTypeObject *bloodObject = [self.hkStore bloodTypeWithError:&error];
@@ -129,7 +129,7 @@ RCT_REMAP_METHOD(getBloodType, getBloodTypeWithResolver:(RCTPromiseResolveBlock)
  TypeV 거의 화상을 입지 않고 무미건조 한 갈색 피부.
  TypeVI 결코 화상을 입지 않고 검은 색 피부에 검은 갈색의 피부.
  */
-RCT_REMAP_METHOD(getFitzpatrickSkin, getFitzpatrickSkinWithResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_REMAP_METHOD(getFitzpatrickSkin, getFitzpatrickSkin:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSError *error;
     HKFitzpatrickSkinTypeObject *skin = [self.hkStore fitzpatrickSkinTypeWithError:&error];
@@ -152,7 +152,7 @@ RCT_REMAP_METHOD(getFitzpatrickSkin, getFitzpatrickSkinWithResolver:(RCTPromiseR
     }
 }
 
-RCT_REMAP_METHOD(getWheelchairUse, getWheelchairUseWithResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_REMAP_METHOD(getWheelchairUse, getWheelchairUse:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSError *error;
     HKWheelchairUseObject *object = [self.hkStore wheelchairUseWithError:&error];
@@ -242,7 +242,7 @@ RCT_REMAP_METHOD(getLatestBodyMassIndex, getLatestBodyMassIndex:(RCTPromiseResol
                                    }];
 }
 
-RCT_REMAP_METHOD(getLatestLeanBodyMass, getLatestBodyMassIndex:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getLatestLeanBodyMass, getLatestLeanBodyMass:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     HKQuantityType *leanBodyMassType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierLeanBodyMass];
     HKUnit *unit = [HKUnit poundUnit];
     [self fetchMostRecentQuantitySampleOfType:leanBodyMassType
@@ -806,7 +806,7 @@ RCT_REMAP_METHOD(saveBodyMassIndex, saveBodyMassIndex:(NSDictionary *)input reso
 
 
 
-RCT_REMAP_METHOD(saveSteps, saveWeight:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(saveSteps, saveSteps:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     double value = [[input objectForKey:@"value"] doubleValue];
     NSString *strStartDate = [input objectForKey:@"startDate"];
     NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[strStartDate doubleValue]];
