@@ -804,8 +804,6 @@ RCT_REMAP_METHOD(saveBodyMassIndex, saveBodyMassIndex:(NSDictionary *)input reso
     }];
 }
 
-
-
 RCT_REMAP_METHOD(saveSteps, saveSteps:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     double value = [[input objectForKey:@"value"] doubleValue];
     NSString *strStartDate = [input objectForKey:@"startDate"];
