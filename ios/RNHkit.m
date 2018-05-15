@@ -22,13 +22,11 @@ RCT_REMAP_METHOD(isAvailable, isAvailable:(RCTPromiseResolveBlock)resolve reject
 
 RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    if (!self.hkStore) {
-        self.hkStore = [[HKHealthStore alloc] init];
-    }
-    if (![HKHealthStore isHealthDataAvailable]) {
-        reject(@"init fail", @"permissions must be provided in the initialization options", nil);
-        return;
-    } else {
+    self.hkStore = [[HKHealthStore alloc] init];
+    if ([HKHealthStore isHealthDataAvailable]) {
+        NSSet *writeDataTypes;
+        NSSet *readDataTypes;
+        
         NSDictionary *permissions = [input objectForKey:@"permissions"];
         if (permissions == nil) {
             reject(@"init fail", @"permissions must be provided in the initialization options", nil);
@@ -36,8 +34,14 @@ RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input reso
         }
         NSArray *reads = [permissions objectForKey:@"read"];
         NSArray *writes = [permissions objectForKey:@"write"];
-        NSSet *readDataTypes = [self getWritePermsFromOptions:reads];
-        NSSet *writeDataTypes = [self getReadPermsFromOptions:writes];
+        NSSet *readPerms = [self getReadPermsFromOptions:reads];
+        NSSet *writePerms = [self getWritePermsFromOptions:writes];
+        if(readPerms != nil) {
+            readDataTypes = readPerms;
+        }
+        if(writePerms != nil) {
+            writeDataTypes = writePerms;
+        }
         // make sure at least 1 read or write permission is provided
         if(!writeDataTypes && !readDataTypes){
             reject(@"init fail", @"permissions must be provided in the initialization options", nil);
@@ -54,6 +58,9 @@ RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input reso
                 });
             }
         }];
+    } else {
+        reject(@"init fail", @"permissions must be provided in the initialization options", nil);
+        return;
     }
 }
 
