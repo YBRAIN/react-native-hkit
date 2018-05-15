@@ -294,7 +294,7 @@ RCT_REMAP_METHOD(getDistanceWalkingRunningOnDay, getDistanceWalkingRunningOnDay:
     HKQuantityType *quantityType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning];
     HKUnit *unit = [HKUnit meterUnit];
     NSString *strDate = [input objectForKey:@"date"];
-    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue / 1000)] : [NSDate date];
+    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate date];
     
     [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double distance, NSDate *startDate, NSDate *endDate, NSError *error) {
         if (!distance) {
@@ -316,7 +316,7 @@ RCT_REMAP_METHOD(getDistanceCyclingOnDay, getDistanceCyclingOnDay:(NSDictionary 
     HKQuantityType *quantityType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceCycling];
     HKUnit *unit = [HKUnit meterUnit];
     NSString *strDate = [input objectForKey:@"date"];
-    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue / 1000)] : [NSDate date];
+    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate date];
     
     [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double distance, NSDate *startDate, NSDate *endDate, NSError *error) {
         if (!distance) {
@@ -338,7 +338,7 @@ RCT_REMAP_METHOD(getFlightsClimbedOnDay, getFlightsClimbedOnDay:(NSDictionary *)
     HKQuantityType *quantityType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierFlightsClimbed];
     HKUnit *unit = [HKUnit countUnit];
     NSString *strDate = [input objectForKey:@"date"];
-    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue / 1000)] : [NSDate date];
+    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate date];
     
     [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double count, NSDate *startDate, NSDate *endDate, NSError *error) {
         if (!count) {
@@ -360,7 +360,7 @@ RCT_REMAP_METHOD(getStepCountOnDay, getStepCountOnDay:(NSDictionary *)input reso
     HKQuantityType *stepCountType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
     HKUnit *stepsUnit = [HKUnit countUnit];
     NSString *strDate = [input objectForKey:@"date"];
-    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue / 1000)] : [NSDate date];
+    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate date];
     
     [self fetchSumOfSamplesOnDayForType:stepCountType
                                    unit:stepsUnit
@@ -394,13 +394,13 @@ RCT_REMAP_METHOD(getHeightSamples, getHeightSamples:(NSDictionary *)input resolv
     BOOL ascending = numBool != nil ? [numBool boolValue] : false;
     
     NSString *strStartDate = [input objectForKey:@"startDate"];
-    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue / 1000)];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
         reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
-    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     
     NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
@@ -433,13 +433,13 @@ RCT_REMAP_METHOD(getWeightSamples, getWeightSamples:(NSDictionary *)input resolv
     BOOL ascending = numBool != nil ? [numBool boolValue] : false;
     
     NSString *strStartDate = [input objectForKey:@"startDate"];
-    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue / 1000)];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
         reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
-    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     
     NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
@@ -465,13 +465,13 @@ RCT_REMAP_METHOD(getSleepSamples, getSleepSamples:(NSDictionary *)input resolver
     NSUInteger limit = numLimit != nil ? [numLimit unsignedIntValue] : HKObjectQueryNoLimit;
     
     NSString *strStartDate = [input objectForKey:@"startDate"];
-    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue / 1000)];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
         reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
-    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     
     NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
@@ -499,13 +499,13 @@ RCT_REMAP_METHOD(getDailyStepSamples, getDailyStepSamples:(NSDictionary *)input 
     BOOL ascending = numBool != nil ? [numBool boolValue] : false;
     
     NSString *strStartDate = [input objectForKey:@"startDate"];
-    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue / 1000)];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
         reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
-    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     NSLog(@"date: %@ ~ %@", startDate, endDate);
     HKQuantityType *stepCountType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
     
@@ -537,13 +537,13 @@ RCT_REMAP_METHOD(getHeartRateSamples, getHeartRateSamples:(NSDictionary *)input 
     BOOL ascending = numBool != nil ? [numBool boolValue] : false;
     
     NSString *strStartDate = [input objectForKey:@"startDate"];
-    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue / 1000)];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
         reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
-    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     
     NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
@@ -578,13 +578,13 @@ RCT_REMAP_METHOD(getBloodGlucoseSamples, getBloodGlucoseSamples:(NSDictionary *)
     BOOL ascending = numBool != nil ? [numBool boolValue] : false;
     
     NSString *strStartDate = [input objectForKey:@"startDate"];
-    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue / 1000)];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
         reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
-    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     
     NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
@@ -617,13 +617,13 @@ RCT_REMAP_METHOD(getBloodPressureSamples, getBloodPressureSamples:(NSDictionary 
     BOOL ascending = numBool != nil ? [numBool boolValue] : false;
     
     NSString *strStartDate = [input objectForKey:@"startDate"];
-    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue / 1000)];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
         reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
-    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     
     NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
@@ -658,13 +658,13 @@ RCT_REMAP_METHOD(getRespiratoryRateSamples, getRespiratoryRateSamples:(NSDiction
     BOOL ascending = numBool != nil ? [numBool boolValue] : false;
     
     NSString *strStartDate = [input objectForKey:@"startDate"];
-    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue / 1000)];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
         reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
-    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     
     NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
@@ -716,13 +716,13 @@ RCT_REMAP_METHOD(getBodyTemperatureSamples, getBodyTemperatureSamples:(NSDiction
     BOOL ascending = numBool != nil ? [numBool boolValue] : false;
     
     NSString *strStartDate = [input objectForKey:@"startDate"];
-    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue / 1000)];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
         reject(@"get blood glucose fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
-    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     
     NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
@@ -747,7 +747,7 @@ RCT_REMAP_METHOD(getBodyTemperatureSamples, getBodyTemperatureSamples:(NSDiction
 RCT_REMAP_METHOD(saveHeight, saveHeight:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     double value = [[input objectForKey:@"value"] doubleValue];
     NSString *strDate = [input objectForKey:@"date"];
-    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate new];
     
     HKUnit *heightUnit = [HKUnit meterUnit];
     HKQuantity *heightQuantity = [HKQuantity quantityWithUnit:heightUnit doubleValue:value];
@@ -767,7 +767,7 @@ RCT_REMAP_METHOD(saveHeight, saveHeight:(NSDictionary *)input resolver:(RCTPromi
 RCT_REMAP_METHOD(saveWeight, saveWeight:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     double value = [[input objectForKey:@"value"] doubleValue];
     NSString *strDate = [input objectForKey:@"date"];
-    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate new];
     
     HKUnit *unit = [HKUnit gramUnitWithMetricPrefix:HKMetricPrefixKilo];
     HKQuantity *weightQuantity = [HKQuantity quantityWithUnit:unit doubleValue:value];
@@ -787,7 +787,7 @@ RCT_REMAP_METHOD(saveWeight, saveWeight:(NSDictionary *)input resolver:(RCTPromi
 RCT_REMAP_METHOD(saveBodyMassIndex, saveBodyMassIndex:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     double value = [[input objectForKey:@"value"] doubleValue];
     NSString *strDate = [input objectForKey:@"date"];
-    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate new];
     
     HKUnit *unit = [HKUnit countUnit];
     HKQuantity *bmiQuantity = [HKQuantity quantityWithUnit:unit doubleValue:value];
@@ -807,9 +807,9 @@ RCT_REMAP_METHOD(saveBodyMassIndex, saveBodyMassIndex:(NSDictionary *)input reso
 RCT_REMAP_METHOD(saveSteps, saveSteps:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     double value = [[input objectForKey:@"value"] doubleValue];
     NSString *strStartDate = [input objectForKey:@"startDate"];
-    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue / 1000)];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     NSString *strEndDate = [input objectForKey:@"endDate"];
-    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue / 1000)] : [NSDate new];
+    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     
     if(startDate == nil || endDate == nil){
         reject(@"saveSteps", @"startDate and endDate are required in options", nil);

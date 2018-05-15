@@ -384,9 +384,11 @@
                                            NSDate *date = result.startDate;
                                            double value = [quantity doubleValueForUnit:[HKUnit countUnit]];
                                            NSLog(@"%@: %f", date, value);
-                                           
-                                           NSString *dateString = [self buildISO8601StringFromDate:date];
-                                           NSArray *elem = @[dateString, @(value)];
+                                           double timestamp = [date timeIntervalSince1970];
+                                           NSArray *elem = @[@{
+                                                                 @"timestamp": @(timestamp),
+                                                                 @"value": @(value)
+                                                                 }];
                                            [data addObject:elem];
                                        }
                                    }];
