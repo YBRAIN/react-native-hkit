@@ -64,7 +64,7 @@ RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input reso
     }
 }
 
-RCT_REMAP_METHOD(isPermissionAvailable, isPermissionAvailable:(NSString *)name resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)rejec)
+RCT_REMAP_METHOD(isPermissionAvailable, isPermissionAvailable:(NSString *)name resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     if (self.hkStore == nil) {
         self.hkStore = [[HKHealthStore alloc] init];

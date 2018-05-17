@@ -160,7 +160,7 @@ typedef NS_ENUM(NSInteger, UnitTypeScalar) {
 }
 
 
-+ (NSDictionary *)writePermsDict {
++ (NSDictionary *)writePermissonsDict {
     NSDictionary *writePerms = @{
                                  // Body Measurements
                                  @"Height" : [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight],
@@ -243,7 +243,7 @@ typedef NS_ENUM(NSInteger, UnitTypeScalar) {
 
 // Returns HealthKit write permissions from options array
 - (NSSet *)getWritePermsFromOptions:(NSArray *)options {
-    NSDictionary *writePermDict = [RNHkit writePermsDict];
+    NSDictionary *writePermDict = [RNHkit writePermissonsDict];
     NSMutableSet *writePermSet = [NSMutableSet setWithCapacity:1];
     
     for(int i=0; i<[options count]; i++) {

@@ -10,6 +10,8 @@
 
 @interface RNHkit (TypesAndPermissions)
 
++ (NSDictionary *)readPermissonsDict;
++ (NSDictionary *)writePermissonsDict;
 - (NSSet *)getReadPermsFromOptions:(NSArray *)options;
 - (NSSet *)getWritePermsFromOptions:(NSArray *)options;
 
