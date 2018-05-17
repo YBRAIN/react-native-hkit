@@ -51,8 +51,12 @@ RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input reso
                 return;
             } else {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    resolve(success);
-                });
+                    if (success) {
+                        resolve(@(true);
+                    } else {
+                        resolve(false);
+                    }
+                };
             }
         }];
     } else {
