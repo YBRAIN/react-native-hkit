@@ -15,9 +15,6 @@ RCT_REMAP_METHOD(isAvailable, isAvailable:(RCTPromiseResolveBlock)resolve reject
         isAvailable = YES;
     }
     resolve(@(isAvailable));
-    if (isAvailable == nil) {
-        reject(@"isAvailable fail", @"isAvailable failure", nil);
-    }
 }
 
 RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
@@ -48,13 +45,13 @@ RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input reso
             return;
         }
         [self.hkStore requestAuthorizationToShareTypes:writeDataTypes readTypes:readDataTypes completion:^(BOOL success, NSError *error) {
-            if (!success) {
+            if (error) {
                 NSString *errMsg = [NSString stringWithFormat:@"Error with HealthKit authorization: %@", error];
                 reject(@"init fail", errMsg, error);
                 return;
             } else {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    resolve(@true);
+                    resolve(success);
                 });
             }
         }];
@@ -77,10 +74,12 @@ RCT_REMAP_METHOD(isPermissionAvailable, isPermissionAvailable:(NSString *)name r
             HKAuthorizationStatus state =  [self.hkStore authorizationStatusForType:val];
             resolve(@(state));
         } else {
-            reject(@"PermissionAvailable checking fail", @"PermissionAvailable fail", nil);
+            resolve(@(-1));
+            return;
         }
     } else {
         reject(@"HealthDataAvailable checking fail", @"isHealthDataAvailable fail", nil);
+        return;
     }
 }
 
@@ -99,7 +98,7 @@ RCT_REMAP_METHOD(getBiologicalSex, getBiologicalSex:(RCTPromiseResolveBlock)reso
         case HKBiologicalSexOther:      value = @"other";   break;
     }
     
-    if(value == nil) {
+    if(error) {
         NSLog(@"error getting biological sex: %@", error);
         reject(@"no_datas", @"There were no datas", error);
         return;
@@ -139,9 +138,10 @@ RCT_REMAP_METHOD(getBloodType, getBloodType:(RCTPromiseResolveBlock)resolve reje
         case HKBloodTypeOPositive:  value = @"O+";      break;
         case HKBloodTypeONegative:  value = @"O-";      break;
     }
-    if(value == nil) {
+    if(error) {
         NSLog(@"error getting blood type: %@", error);
         reject(@"no_datas", @"error getting blood type", error);
+        return;
     } else {
         resolve(value);
     }
@@ -170,7 +170,7 @@ RCT_REMAP_METHOD(getFitzpatrickSkin, getFitzpatrickSkin:(RCTPromiseResolveBlock)
         case HKFitzpatrickSkinTypeV:        value = @"DarkBrown";   break;
         case HKFitzpatrickSkinTypeVI:       value = @"Black";       break;
     }
-    if(value == nil) {
+    if(error) {
         NSLog(@"error getting FitzpatrickSkin: %@", error);
         reject(@"no_datas", @"There were no datas", error);
         return;
@@ -189,7 +189,7 @@ RCT_REMAP_METHOD(getWheelchairUse, getWheelchairUse:(RCTPromiseResolveBlock)reso
         case HKWheelchairUseNo:     value = @"No";      break;
         case HKWheelchairUseYes:    value = @"Yes";     break;
     }
-    if(value == nil) {
+    if(error) {
         NSLog(@"error getting WheelchairUse: %@", error);
         reject(@"no_datas", @"There were no datas", error);
         return;
@@ -205,11 +205,14 @@ RCT_REMAP_METHOD(getLatestHeight, getLatestHeight:(RCTPromiseResolveBlock)resolv
     [self fetchMostRecentQuantitySampleOfType:heightType
                                     predicate:nil
                                    completion:^(HKQuantity *mostRecentQuantity, NSDate *startDate, NSDate *endDate, NSError *error) {
-                                       if (!mostRecentQuantity) {
+                                       if (error) {
                                            NSLog(@"error getting latest height: %@", error);
                                            reject(@"getLatestHeight", @"error getting latest height", error);
+                                           return;
                                        }
-                                       else {
+                                       if (!mostRecentQuantity) {
+                                           resolve(@[]);
+                                       } else {
                                            // Determine the height in the required unit.
                                            double height = [mostRecentQuantity doubleValueForUnit:unit];
                                            NSDictionary *response = @{
@@ -217,7 +220,7 @@ RCT_REMAP_METHOD(getLatestHeight, getLatestHeight:(RCTPromiseResolveBlock)resolv
                                                                       @"startDate" : [self buildISO8601StringFromDate:startDate],
                                                                       @"endDate" : [self buildISO8601StringFromDate:endDate],
                                                                       };
-                                           resolve(response);
+                                           resolve(@[response]);
                                        }
                                    }];
 }
@@ -228,11 +231,14 @@ RCT_REMAP_METHOD(getLatestWeight, getLatestWeight:(RCTPromiseResolveBlock)resolv
     [self fetchMostRecentQuantitySampleOfType:weightType
                                     predicate:nil
                                    completion:^(HKQuantity *mostRecentQuantity, NSDate *startDate, NSDate *endDate, NSError *error) {
-                                       if (!mostRecentQuantity) {
-                                           NSLog(@"error getting latest weight: %@", error);
-                                           reject(@"getLatestWeight", @"error getting latest weight", error);
+                                       if (error) {
+                                           NSLog(@"error getting latest Weight: %@", error);
+                                           reject(@"getLatestWeight", @"error getting latest Weight", error);
+                                           return;
                                        }
-                                       else {
+                                       if (!mostRecentQuantity) {
+                                           resolve(@[]);
+                                       } else {
                                            // Determine the weight in the required unit.
                                            double usersWeight = [mostRecentQuantity doubleValueForUnit:unit];
                                            NSDictionary *response = @{
@@ -240,7 +246,7 @@ RCT_REMAP_METHOD(getLatestWeight, getLatestWeight:(RCTPromiseResolveBlock)resolv
                                                                       @"startDate" : [self buildISO8601StringFromDate:startDate],
                                                                       @"endDate" : [self buildISO8601StringFromDate:endDate],
                                                                       };
-                                           resolve(response);
+                                           resolve(@[response]);
                                        }
                                    }];
 }
@@ -251,11 +257,14 @@ RCT_REMAP_METHOD(getLatestBodyMassIndex, getLatestBodyMassIndex:(RCTPromiseResol
     [self fetchMostRecentQuantitySampleOfType:bmiType
                                     predicate:nil
                                    completion:^(HKQuantity *mostRecentQuantity, NSDate *startDate, NSDate *endDate, NSError *error) {
-                                       if (!mostRecentQuantity) {
+                                       if (error) {
                                            NSLog(@"error getting latest BMI: %@", error);
-                                           reject(@"getLatestBodyMassIndex", @"error getting latest BM", nil);
+                                           reject(@"getLatestBodyMassIndex", @"error getting latest BMI", error);
+                                           return;
                                        }
-                                       else {
+                                       if (!mostRecentQuantity) {
+                                           resolve(@[]);
+                                       } else {
                                            // Determine the bmi in the required unit.
                                            double bmi = [mostRecentQuantity doubleValueForUnit:unit];
                                            NSDictionary *response = @{
@@ -264,7 +273,7 @@ RCT_REMAP_METHOD(getLatestBodyMassIndex, getLatestBodyMassIndex:(RCTPromiseResol
                                                                       @"endDate" : [self buildISO8601StringFromDate:endDate],
                                                                       };
                                            
-                                           resolve(response);
+                                           resolve(@[response]);
                                        }
                                    }];
 }
@@ -275,11 +284,14 @@ RCT_REMAP_METHOD(getLatestLeanBodyMass, getLatestLeanBodyMass:(RCTPromiseResolve
     [self fetchMostRecentQuantitySampleOfType:leanBodyMassType
                                     predicate:nil
                                    completion:^(HKQuantity *mostRecentQuantity, NSDate *startDate, NSDate *endDate, NSError *error) {
-                                       if (!mostRecentQuantity) {
+                                       if (error) {
                                            NSLog(@"error getting latest lean body mass: %@", error);
                                            reject(@"getLatestLeanBodyMass", @"error getting latest lean body mass", error);
+                                           return;
                                        }
-                                       else {
+                                       if (!mostRecentQuantity) {
+                                           resolve(@[]);
+                                       } else {
                                            double leanBodyMass = [mostRecentQuantity doubleValueForUnit:unit];
                                            NSDictionary *response = @{
                                                                       @"value" : @(leanBodyMass),
@@ -287,7 +299,7 @@ RCT_REMAP_METHOD(getLatestLeanBodyMass, getLatestLeanBodyMass:(RCTPromiseResolve
                                                                       @"endDate" : [self buildISO8601StringFromDate:endDate],
                                                                       };
                                            
-                                           resolve(response);
+                                           resolve(@[response]);
                                        }
                                    }];
 }
@@ -298,11 +310,14 @@ RCT_REMAP_METHOD(getLatestBodyFatPercentage, getLatestBodyFatPercentage:(RCTProm
     [self fetchMostRecentQuantitySampleOfType:bodyFatPercentType
                                     predicate:nil
                                    completion:^(HKQuantity *mostRecentQuantity, NSDate *startDate, NSDate *endDate, NSError *error) {
-                                       if (!mostRecentQuantity) {
+                                       if (error) {
                                            NSLog(@"error getting latest body fat percentage: %@", error);
                                            reject(@"getLatestBodyFatPercentage", @"error getting latest body fat percentage", error);
+                                           return;
                                        }
-                                       else {
+                                       if (!mostRecentQuantity) {
+                                           resolve(@[]);
+                                       } else {
                                            // Determine the weight in the required unit.
                                            double percentage = [mostRecentQuantity doubleValueForUnit:unit];
                                            percentage = percentage * 100;
@@ -312,7 +327,7 @@ RCT_REMAP_METHOD(getLatestBodyFatPercentage, getLatestBodyFatPercentage:(RCTProm
                                                                       @"endDate" : [self buildISO8601StringFromDate:endDate],
                                                                       };
                                            
-                                           resolve(response);
+                                           resolve(@[response]);
                                        }
                                    }];
 }
@@ -324,18 +339,20 @@ RCT_REMAP_METHOD(getDistanceWalkingRunningOnDay, getDistanceWalkingRunningOnDay:
     NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate date];
     
     [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double distance, NSDate *startDate, NSDate *endDate, NSError *error) {
-        if (!distance) {
+        if (error) {
             NSLog(@"ERROR getting DistanceWalkingRunning: %@", error);
             reject(@"getDistanceWalkingRunningOnDay", @"ERROR getting DistanceWalkingRunning", error);
             return;
         }
-        
+        if (!distance) {
+            resolve(@[]);
+        }
         NSDictionary *response = @{
                                    @"value" : @(distance),
                                    @"startDate" : [self buildISO8601StringFromDate:startDate],
                                    @"endDate" : [self buildISO8601StringFromDate:endDate],
                                    };
-        resolve(response);
+        resolve(@[response]);
     }];
 }
 
@@ -346,18 +363,20 @@ RCT_REMAP_METHOD(getDistanceCyclingOnDay, getDistanceCyclingOnDay:(NSDictionary 
     NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate date];
     
     [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double distance, NSDate *startDate, NSDate *endDate, NSError *error) {
-        if (!distance) {
+        if (!error) {
             NSLog(@"ERROR getting DistanceCycling: %@", error);
             reject(@"getDistanceCyclingOnDay", @"ERROR getting DistanceCycling", error);
             return;
         }
-        
+        if (!distance) {
+            resolve(@[]);
+        }
         NSDictionary *response = @{
                                    @"value" : @(distance),
                                    @"startDate" : [self buildISO8601StringFromDate:startDate],
                                    @"endDate" : [self buildISO8601StringFromDate:endDate],
                                    };
-        resolve(response);
+        resolve(@[response]);
     }];
 }
 
@@ -368,18 +387,20 @@ RCT_REMAP_METHOD(getFlightsClimbedOnDay, getFlightsClimbedOnDay:(NSDictionary *)
     NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate date];
     
     [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double count, NSDate *startDate, NSDate *endDate, NSError *error) {
-        if (!count) {
+        if (!error) {
             NSLog(@"ERROR getting FlightsClimbed: %@", error);
             reject(@"getFlightsClimbedOnDay", @"ERROR getting FlightsClimbed", error);
             return;
         }
-        
+        if (!count) {
+            resolve(@[]);
+        }
         NSDictionary *response = @{
                                    @"value" : @(count),
                                    @"startDate" : [self buildISO8601StringFromDate:startDate],
                                    @"endDate" : [self buildISO8601StringFromDate:endDate],
                                    };
-        resolve(response);
+        resolve(@[response]);
     }];
 }
 
@@ -393,18 +414,20 @@ RCT_REMAP_METHOD(getStepCountOnDay, getStepCountOnDay:(NSDictionary *)input reso
                                    unit:stepsUnit
                                     day:date
                              completion:^(double value, NSDate *startDate, NSDate *endDate, NSError *error) {
-                                 if (!value) {
+                                 if (!error) {
                                      NSLog(@"could not fetch step count for day: %@", error);
                                      reject(@"getStepCountOnDay", @"could not fetch step count for day", error);
                                      return;
                                  }
-                                 
+                                 if (!value) {
+                                     resolve(@[]);
+                                 }
                                  NSDictionary *response = @{
                                                             @"value" : @(value),
                                                             @"startDate" : [self buildISO8601StringFromDate:startDate],
                                                             @"endDate" : [self buildISO8601StringFromDate:endDate],
                                                             };
-                                 resolve(response);
+                                 resolve(@[response]);
                              }];
 }
 
@@ -437,14 +460,12 @@ RCT_REMAP_METHOD(getHeightSamples, getHeightSamples:(NSDictionary *)input resolv
                            ascending:ascending
                                limit:limit
                           completion:^(NSArray *results, NSError *error) {
-                              if(results){
-                                  resolve(results);
-                                  return;
-                              } else {
+                              if(error){
                                   NSLog(@"error getting height samples: %@", error);
                                   reject(@"getHeightSamples", @"error getting height samples", error);
                                   return;
                               }
+                              resolve(results);
                           }];
 }
 
@@ -476,14 +497,12 @@ RCT_REMAP_METHOD(getWeightSamples, getWeightSamples:(NSDictionary *)input resolv
                            ascending:ascending
                                limit:limit
                           completion:^(NSArray *results, NSError *error) {
-                              if(results){
-                                  resolve(results);
-                                  return;
-                              } else {
+                              if(error){
                                   NSLog(@"error getting weight samples: %@", error);
                                   reject(@"getWeightSamples", @"error getting weight samples", nil);
                                   return;
                               }
+                              resolve(results);
                           }];
 }
 
@@ -505,14 +524,12 @@ RCT_REMAP_METHOD(getSleepSamples, getSleepSamples:(NSDictionary *)input resolver
     [self fetchSleepCategorySamplesForPredicate:predicate
                                           limit:limit
                                      completion:^(NSArray *results, NSError *error) {
-                                         if(results){
-                                             resolve(results);
-                                             return;
-                                         } else {
+                                         if(error){
                                              NSLog(@"error getting sleep samples: %@", error);
                                              reject(@"getSleepSamples", @"error getting sleep samples", error);
                                              return;
                                          }
+                                         resolve(results);
                                      }];
 }
 
@@ -543,7 +560,7 @@ RCT_REMAP_METHOD(getDailyStepSamples, getDailyStepSamples:(NSDictionary *)input 
                                        ascending:ascending
                                            limit:limit
                                       completion:^(NSArray *result, NSError *error){
-                                          if (error != nil) {
+                                          if (error) {
                                               NSLog(@"error with fetchCumulativeSumStatisticsCollection: %@", error);
                                               reject(@"getDailyStepSamples", @"error with fetchCumulativeSumStatisticsCollection", error);
                                               return;
@@ -580,14 +597,12 @@ RCT_REMAP_METHOD(getHeartRateSamples, getHeartRateSamples:(NSDictionary *)input 
                            ascending:ascending
                                limit:limit
                           completion:^(NSArray *results, NSError *error) {
-                              if(results){
-                                  resolve(results);
-                                  return;
-                              } else {
+                              if(error){
                                   NSLog(@"error getting heart rate samples: %@", error);
                                   reject(@"getHeartRateSamples", @"error getting heart rate samples", error);
                                   return;
                               }
+                              resolve(results);
                           }];
 }
 
@@ -621,14 +636,12 @@ RCT_REMAP_METHOD(getBloodGlucoseSamples, getBloodGlucoseSamples:(NSDictionary *)
                            ascending:ascending
                                limit:limit
                           completion:^(NSArray *results, NSError *error) {
-                              if(results) {
-                                  resolve(results);
-                                  return;
-                              } else {
+                              if(error) {
                                   NSLog(@"error getting blood glucose samples: %@", error);
                                   reject(@"get blood glucose fail", @"error getting blood glucose samples", error);
                                   return;
                               }
+                              resolve(results);
                           }];
 }
 
@@ -652,7 +665,7 @@ RCT_REMAP_METHOD(getBloodPressureSamples, getBloodPressureSamples:(NSDictionary 
     NSString *strEndDate = [input objectForKey:@"endDate"];
     NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     
-    NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
     [self fetchQuantitySamplesOfType:bodyTemperatureType
                                 unit:unit
@@ -660,14 +673,12 @@ RCT_REMAP_METHOD(getBloodPressureSamples, getBloodPressureSamples:(NSDictionary 
                            ascending:ascending
                                limit:limit
                           completion:^(NSArray *results, NSError *error) {
-                              if(results){
-                                  resolve(results);
-                                  return;
-                              } else {
+                              if(error){
                                   NSLog(@"error getting body temperature samples: %@", error);
                                   reject(@"getBodyTemperatureSamples", @"error getting body temperature samples", error);
                                   return;
                               }
+                              resolve(results);
                           }];
 }
 
@@ -693,7 +704,7 @@ RCT_REMAP_METHOD(getRespiratoryRateSamples, getRespiratoryRateSamples:(NSDiction
     NSString *strEndDate = [input objectForKey:@"endDate"];
     NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     
-    NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
     [self fetchCorrelationSamplesOfType:bloodPressureCorrelationType
                                    unit:unit
@@ -701,33 +712,29 @@ RCT_REMAP_METHOD(getRespiratoryRateSamples, getRespiratoryRateSamples:(NSDiction
                               ascending:ascending
                                   limit:limit
                              completion:^(NSArray *results, NSError *error) {
-                                 if(results){
-                                     NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
-                                     
-                                     for (NSDictionary *sample in results) {
-                                         HKCorrelation *bloodPressureValues = [sample valueForKey:@"correlation"];
-                                         
-                                         HKQuantitySample *bloodPressureSystolicValue = [bloodPressureValues objectsForType:systolicType].anyObject;
-                                         HKQuantitySample *bloodPressureDiastolicValue = [bloodPressureValues objectsForType:diastolicType].anyObject;
-                                         
-                                         NSDictionary *elem = @{
-                                                                @"value": @{
-                                                                        @"bloodPressureSystolicValue" : @([bloodPressureSystolicValue.quantity doubleValueForUnit:unit]),
-                                                                        @"bloodPressureDiastolicValue" : @([bloodPressureDiastolicValue.quantity doubleValueForUnit:unit])
-                                                                        },
-                                                                @"startDate" : [sample valueForKey:@"startDate"],
-                                                                @"endDate" : [sample valueForKey:@"endDate"],
-                                                                };
-                                         [data addObject:elem];
-                                     }
-                                     
-                                     resolve(data);
-                                     return;
-                                 } else {
+                                 if(error){
                                      NSLog(@"error getting blood pressure samples: %@", error);
                                      reject(@"getBloodPressureSamples", @"error getting blood pressure samples", error);
                                      return;
                                  }
+                                 NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
+                                 for (NSDictionary *sample in results) {
+                                     HKCorrelation *bloodPressureValues = [sample valueForKey:@"correlation"];
+                                     
+                                     HKQuantitySample *bloodPressureSystolicValue = [bloodPressureValues objectsForType:systolicType].anyObject;
+                                     HKQuantitySample *bloodPressureDiastolicValue = [bloodPressureValues objectsForType:diastolicType].anyObject;
+                                     
+                                     NSDictionary *elem = @{
+                                                            @"value": @{
+                                                                    @"bloodPressureSystolicValue" : @([bloodPressureSystolicValue.quantity doubleValueForUnit:unit]),
+                                                                    @"bloodPressureDiastolicValue" : @([bloodPressureDiastolicValue.quantity doubleValueForUnit:unit])
+                                                                    },
+                                                            @"startDate" : [sample valueForKey:@"startDate"],
+                                                            @"endDate" : [sample valueForKey:@"endDate"],
+                                                            };
+                                     [data addObject:elem];
+                                 }
+                                 resolve(data);
                              }];
 }
 
@@ -751,7 +758,7 @@ RCT_REMAP_METHOD(getBodyTemperatureSamples, getBodyTemperatureSamples:(NSDiction
     NSString *strEndDate = [input objectForKey:@"endDate"];
     NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
     
-    NSPredicate * predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
     
     [self fetchQuantitySamplesOfType:respiratoryRateType
                                 unit:unit
@@ -759,16 +766,15 @@ RCT_REMAP_METHOD(getBodyTemperatureSamples, getBodyTemperatureSamples:(NSDiction
                            ascending:ascending
                                limit:limit
                           completion:^(NSArray *results, NSError *error) {
-                              if(results){
-                                  resolve(results);
-                                  return;
-                              } else {
+                              if(error){
                                   NSLog(@"error getting respiratory rate samples: %@", error);
                                   reject(@"getRespiratoryRateSamples", @"error getting respiratory rate samples", error);
                                   return;
                               }
+                              resolve(results);
                           }];
 }
+
 
 // save
 RCT_REMAP_METHOD(saveHeight, saveHeight:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
