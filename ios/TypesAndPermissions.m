@@ -119,7 +119,7 @@ typedef NS_ENUM(NSInteger, UnitTypeScalar) {
 
 #pragma mark - HealthKit Permissions
 
-- (NSDictionary *)readPermsDict {
++ (NSDictionary *)readPermissonsDict {
     NSDictionary *readPerms = @{
                                 // Characteristic Identifiers
                                 @"DateOfBirth" : [HKObjectType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth],
@@ -160,7 +160,7 @@ typedef NS_ENUM(NSInteger, UnitTypeScalar) {
 }
 
 
-- (NSDictionary *)writePermsDict {
++ (NSDictionary *)writePermsDict {
     NSDictionary *writePerms = @{
                                  // Body Measurements
                                  @"Height" : [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight],
@@ -227,7 +227,7 @@ typedef NS_ENUM(NSInteger, UnitTypeScalar) {
 
 // Returns HealthKit read permissions from options array
 - (NSSet *)getReadPermsFromOptions:(NSArray *)options {
-    NSDictionary *readPermDict = [self readPermsDict];
+    NSDictionary *readPermDict = [RNHkit readPermissonsDict];
     NSMutableSet *readPermSet = [NSMutableSet setWithCapacity:1];
     
     for(int i=0; i<[options count]; i++) {
@@ -243,7 +243,7 @@ typedef NS_ENUM(NSInteger, UnitTypeScalar) {
 
 // Returns HealthKit write permissions from options array
 - (NSSet *)getWritePermsFromOptions:(NSArray *)options {
-    NSDictionary *writePermDict = [self writePermsDict];
+    NSDictionary *writePermDict = [RNHkit writePermsDict];
     NSMutableSet *writePermSet = [NSMutableSet setWithCapacity:1];
     
     for(int i=0; i<[options count]; i++) {

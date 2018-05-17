@@ -64,6 +64,26 @@ RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input reso
     }
 }
 
+RCT_REMAP_METHOD(isPermissionAvailable, isPermissionAvailable:(NSString *)name resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)rejec)
+{
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
+    if ([HKHealthStore isHealthDataAvailable]) {
+        
+        NSDictionary *dicPermissons = [RNHkit readPermissonsDict];
+        HKObjectType *val = [dicPermissons objectForKey:name];
+        if(val != nil) {
+            HKAuthorizationStatus state =  [self.hkStore authorizationStatusForType:val];
+            resolve(@(state));
+        } else {
+            reject(@"PermissionAvailable checking fail", @"PermissionAvailable fail", nil);
+        }
+    } else {
+        reject(@"HealthDataAvailable checking fail", @"isHealthDataAvailable fail", nil);
+    }
+}
+
 
 // Characteristic
 RCT_REMAP_METHOD(getBiologicalSex, getBiologicalSex:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
