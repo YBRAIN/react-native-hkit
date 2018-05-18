@@ -102,7 +102,7 @@ RCT_REMAP_METHOD(getBiologicalSex, getBiologicalSex:(RCTPromiseResolveBlock)reso
         case HKBiologicalSexOther:      value = @"other";   break;
     }
     
-    if(error) {
+    if(!value) {
         NSLog(@"error getting biological sex: %@", error);
         reject(@"no_datas", @"There were no datas", error);
         return;
@@ -142,7 +142,7 @@ RCT_REMAP_METHOD(getBloodType, getBloodType:(RCTPromiseResolveBlock)resolve reje
         case HKBloodTypeOPositive:  value = @"O+";      break;
         case HKBloodTypeONegative:  value = @"O-";      break;
     }
-    if(error) {
+    if(!value) {
         NSLog(@"error getting blood type: %@", error);
         reject(@"no_datas", @"error getting blood type", error);
         return;
@@ -174,7 +174,7 @@ RCT_REMAP_METHOD(getFitzpatrickSkin, getFitzpatrickSkin:(RCTPromiseResolveBlock)
         case HKFitzpatrickSkinTypeV:        value = @"DarkBrown";   break;
         case HKFitzpatrickSkinTypeVI:       value = @"Black";       break;
     }
-    if(error) {
+    if(!value) {
         NSLog(@"error getting FitzpatrickSkin: %@", error);
         reject(@"no_datas", @"There were no datas", error);
         return;
@@ -193,7 +193,7 @@ RCT_REMAP_METHOD(getWheelchairUse, getWheelchairUse:(RCTPromiseResolveBlock)reso
         case HKWheelchairUseNo:     value = @"No";      break;
         case HKWheelchairUseYes:    value = @"Yes";     break;
     }
-    if(error) {
+    if(!value) {
         NSLog(@"error getting WheelchairUse: %@", error);
         reject(@"no_datas", @"There were no datas", error);
         return;
@@ -367,7 +367,7 @@ RCT_REMAP_METHOD(getDistanceCyclingOnDay, getDistanceCyclingOnDay:(NSDictionary 
     NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate date];
     
     [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double distance, NSDate *startDate, NSDate *endDate, NSError *error) {
-        if (!error) {
+        if (error) {
             NSLog(@"ERROR getting DistanceCycling: %@", error);
             reject(@"getDistanceCyclingOnDay", @"ERROR getting DistanceCycling", error);
             return;
@@ -391,7 +391,7 @@ RCT_REMAP_METHOD(getFlightsClimbedOnDay, getFlightsClimbedOnDay:(NSDictionary *)
     NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate date];
     
     [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double count, NSDate *startDate, NSDate *endDate, NSError *error) {
-        if (!error) {
+        if (error) {
             NSLog(@"ERROR getting FlightsClimbed: %@", error);
             reject(@"getFlightsClimbedOnDay", @"ERROR getting FlightsClimbed", error);
             return;
@@ -418,7 +418,7 @@ RCT_REMAP_METHOD(getStepCountOnDay, getStepCountOnDay:(NSDictionary *)input reso
                                    unit:stepsUnit
                                     day:date
                              completion:^(double value, NSDate *startDate, NSDate *endDate, NSError *error) {
-                                 if (!error) {
+                                 if (error) {
                                      NSLog(@"could not fetch step count for day: %@", error);
                                      reject(@"getStepCountOnDay", @"could not fetch step count for day", error);
                                      return;
@@ -450,7 +450,7 @@ RCT_REMAP_METHOD(getHeightSamples, getHeightSamples:(NSDictionary *)input resolv
     NSString *strStartDate = [input objectForKey:@"startDate"];
     NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
-        reject(@"get blood glucose fail", @"startDate is required in options", nil);
+        reject(@"getHeightSamples fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
@@ -487,7 +487,7 @@ RCT_REMAP_METHOD(getWeightSamples, getWeightSamples:(NSDictionary *)input resolv
     NSString *strStartDate = [input objectForKey:@"startDate"];
     NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
-        reject(@"get blood glucose fail", @"startDate is required in options", nil);
+        reject(@"getWeightSamples fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
@@ -517,7 +517,7 @@ RCT_REMAP_METHOD(getSleepSamples, getSleepSamples:(NSDictionary *)input resolver
     NSString *strStartDate = [input objectForKey:@"startDate"];
     NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
-        reject(@"get blood glucose fail", @"startDate is required in options", nil);
+        reject(@"getSleepSamples fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
@@ -549,7 +549,7 @@ RCT_REMAP_METHOD(getDailyStepSamples, getDailyStepSamples:(NSDictionary *)input 
     NSString *strStartDate = [input objectForKey:@"startDate"];
     NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
-        reject(@"get blood glucose fail", @"startDate is required in options", nil);
+        reject(@"getDailyStepSamples fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
@@ -587,7 +587,7 @@ RCT_REMAP_METHOD(getHeartRateSamples, getHeartRateSamples:(NSDictionary *)input 
     NSString *strStartDate = [input objectForKey:@"startDate"];
     NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
-        reject(@"get blood glucose fail", @"startDate is required in options", nil);
+        reject(@"getHeartRateSamples fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
@@ -663,7 +663,7 @@ RCT_REMAP_METHOD(getBloodPressureSamples, getBloodPressureSamples:(NSDictionary 
     NSString *strStartDate = [input objectForKey:@"startDate"];
     NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
-        reject(@"get blood glucose fail", @"startDate is required in options", nil);
+        reject(@"getBloodPressureSamples fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
@@ -702,7 +702,7 @@ RCT_REMAP_METHOD(getRespiratoryRateSamples, getRespiratoryRateSamples:(NSDiction
     NSString *strStartDate = [input objectForKey:@"startDate"];
     NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
-        reject(@"get blood glucose fail", @"startDate is required in options", nil);
+        reject(@"getRespiratoryRateSamples fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
@@ -756,7 +756,7 @@ RCT_REMAP_METHOD(getBodyTemperatureSamples, getBodyTemperatureSamples:(NSDiction
     NSString *strStartDate = [input objectForKey:@"startDate"];
     NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
     if(startDate == nil) {
-        reject(@"get blood glucose fail", @"startDate is required in options", nil);
+        reject(@"getBodyTemperatureSamples fail", @"startDate is required in options", nil);
         return;
     }
     NSString *strEndDate = [input objectForKey:@"endDate"];
