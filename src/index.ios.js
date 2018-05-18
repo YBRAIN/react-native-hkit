@@ -91,11 +91,11 @@ export default {
     async getBloodPressureSamples(readOption: JSON): Promise<void> {
         return HealthKit.getBloodPressureSamples(readOption);
     },
-    async getRespiratoryRateSamples(readOption: JSON): Promise<void> {
-        return HealthKit.getRespiratoryRateSamples(readOption);
-    },
     async getBodyTemperatureSamples(readOption: JSON): Promise<void> {
         return HealthKit.getBodyTemperatureSamples(readOption);
     },
+//    async getRespiratoryRateSamples(readOption: JSON): Promise<void> {
+//        return HealthKit.getRespiratoryRateSamples(readOption);
+//    },
 
 };
