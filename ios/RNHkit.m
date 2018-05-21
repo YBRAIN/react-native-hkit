@@ -19,7 +19,9 @@ RCT_REMAP_METHOD(isAvailable, isAvailable:(RCTPromiseResolveBlock)resolve reject
 
 RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    self.hkStore = [[HKHealthStore alloc] init];
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
     if ([HKHealthStore isHealthDataAvailable]) {
         NSSet *writeDataTypes;
         NSSet *readDataTypes;
@@ -91,6 +93,9 @@ RCT_REMAP_METHOD(isPermissionAvailable, isPermissionAvailable:(NSString *)name r
 // Characteristic
 RCT_REMAP_METHOD(getBiologicalSex, getBiologicalSex:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
     NSError *error;
     HKBiologicalSexObject *bioSex = [self.hkStore biologicalSexWithError:&error];
     NSString *value = nil;
@@ -112,6 +117,9 @@ RCT_REMAP_METHOD(getBiologicalSex, getBiologicalSex:(RCTPromiseResolveBlock)reso
 
 RCT_REMAP_METHOD(getDateOfBirth, getDateOfBirth:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
     NSError *error;
     NSDateComponents *dateOfBirth = [self.hkStore dateOfBirthComponentsWithError:&error];
     
@@ -127,6 +135,9 @@ RCT_REMAP_METHOD(getDateOfBirth, getDateOfBirth:(RCTPromiseResolveBlock)resolve 
 
 RCT_REMAP_METHOD(getBloodType, getBloodType:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
     NSError *error;
     HKBloodTypeObject *bloodObject = [self.hkStore bloodTypeWithError:&error];
     
@@ -162,6 +173,9 @@ RCT_REMAP_METHOD(getBloodType, getBloodType:(RCTPromiseResolveBlock)resolve reje
  */
 RCT_REMAP_METHOD(getFitzpatrickSkin, getFitzpatrickSkin:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
     NSError *error;
     HKFitzpatrickSkinTypeObject *skin = [self.hkStore fitzpatrickSkinTypeWithError:&error];
     NSString *value = nil;
@@ -185,6 +199,9 @@ RCT_REMAP_METHOD(getFitzpatrickSkin, getFitzpatrickSkin:(RCTPromiseResolveBlock)
 
 RCT_REMAP_METHOD(getWheelchairUse, getWheelchairUse:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
     NSError *error;
     HKWheelchairUseObject *object = [self.hkStore wheelchairUseWithError:&error];
     NSString *value = nil;
@@ -678,8 +695,8 @@ RCT_REMAP_METHOD(getBloodPressureSamples, getBloodPressureSamples:(NSDictionary 
                                limit:limit
                           completion:^(NSArray *results, NSError *error) {
                               if(error){
-                                  NSLog(@"error getting body temperature samples: %@", error);
-                                  reject(@"getBodyTemperatureSamples", @"error getting body temperature samples", error);
+                                  NSLog(@"error getting BloodPressure samples: %@", error);
+                                  reject(@"getBloodPressureSamples", @"error getting BloodPressure samples", error);
                                   return;
                               }
                               resolve(results);
@@ -717,8 +734,8 @@ RCT_REMAP_METHOD(getBloodPressureSamples, getBloodPressureSamples:(NSDictionary 
 //                                  limit:limit
 //                             completion:^(NSArray *results, NSError *error) {
 //                                 if(error){
-//                                     NSLog(@"error getting blood pressure samples: %@", error);
-//                                     reject(@"getBloodPressureSamples", @"error getting blood pressure samples", error);
+//                                     NSLog(@"error getting RespiratoryRate samples: %@", error);
+//                                     reject(@"getRespiratoryRateSamples", @"error getting RespiratoryRate samples", error);
 //                                     return;
 //                                 }
 ////                                 NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
@@ -771,8 +788,8 @@ RCT_REMAP_METHOD(getBodyTemperatureSamples, getBodyTemperatureSamples:(NSDiction
                                limit:limit
                           completion:^(NSArray *results, NSError *error) {
                               if(error){
-                                  NSLog(@"error getting respiratory rate samples: %@", error);
-                                  reject(@"getRespiratoryRateSamples", @"error getting respiratory rate samples", error);
+                                  NSLog(@"error getting BodyTemperature samples: %@", error);
+                                  reject(@"getBodyTemperatureSamples", @"error getting BodyTemperature samples", error);
                                   return;
                               }
                               resolve(results);
@@ -782,6 +799,9 @@ RCT_REMAP_METHOD(getBodyTemperatureSamples, getBodyTemperatureSamples:(NSDiction
 
 // save
 RCT_REMAP_METHOD(saveHeight, saveHeight:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
     double value = [[input objectForKey:@"value"] doubleValue];
     NSString *strDate = [input objectForKey:@"date"];
     NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate new];
@@ -802,6 +822,9 @@ RCT_REMAP_METHOD(saveHeight, saveHeight:(NSDictionary *)input resolver:(RCTPromi
 }
 
 RCT_REMAP_METHOD(saveWeight, saveWeight:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
     double value = [[input objectForKey:@"value"] doubleValue];
     NSString *strDate = [input objectForKey:@"date"];
     NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate new];
@@ -822,6 +845,9 @@ RCT_REMAP_METHOD(saveWeight, saveWeight:(NSDictionary *)input resolver:(RCTPromi
 }
 
 RCT_REMAP_METHOD(saveBodyMassIndex, saveBodyMassIndex:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
     double value = [[input objectForKey:@"value"] doubleValue];
     NSString *strDate = [input objectForKey:@"date"];
     NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate new];
@@ -842,6 +868,9 @@ RCT_REMAP_METHOD(saveBodyMassIndex, saveBodyMassIndex:(NSDictionary *)input reso
 }
 
 RCT_REMAP_METHOD(saveSteps, saveSteps:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
     double value = [[input objectForKey:@"value"] doubleValue];
     NSString *strStartDate = [input objectForKey:@"startDate"];
     NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];

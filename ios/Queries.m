@@ -83,7 +83,7 @@
                                 }
                             }
                             ];
-    if (!self.hkStore) {
+    if (self.hkStore == nil) {
         self.hkStore = [[HKHealthStore alloc] init];
     }
     [self.hkStore executeQuery:query];
@@ -142,7 +142,7 @@
                                                      sortDescriptors:@[timeSortDescriptor]
                                                       resultsHandler:handlerBlock];
     
-    if (!self.hkStore) {
+    if (self.hkStore == nil) {
         self.hkStore = [[HKHealthStore alloc] init];
     }
     [self.hkStore executeQuery:query];
@@ -234,7 +234,7 @@
                                                      sortDescriptors:@[timeSortDescriptor]
                                                       resultsHandler:handlerBlock];
     
-    if (!self.hkStore) {
+    if (self.hkStore == nil) {
         self.hkStore = [[HKHealthStore alloc] init];
     }
     [self.hkStore executeQuery:query];
@@ -289,7 +289,7 @@
                                                      sortDescriptors:@[timeSortDescriptor]
                                                       resultsHandler:handlerBlock];
     
-    if (!self.hkStore) {
+    if (self.hkStore == nil) {
         self.hkStore = [[HKHealthStore alloc] init];
     }
     [self.hkStore executeQuery:query];
@@ -312,7 +312,7 @@
                                                                  }
                                                              }];
     
-    if (!self.hkStore) {
+    if (self.hkStore == nil) {
         self.hkStore = [[HKHealthStore alloc] init];
     }
     [self.hkStore executeQuery:query];
@@ -338,7 +338,7 @@
                                                                  }
                                                              }];
     
-    if (!self.hkStore) {
+    if (self.hkStore == nil) {
         self.hkStore = [[HKHealthStore alloc] init];
     }
     [self.hkStore executeQuery:query];
@@ -396,7 +396,7 @@
         completionHandler(data, err);
     };
     
-    if (!self.hkStore) {
+    if (self.hkStore == nil) {
         self.hkStore = [[HKHealthStore alloc] init];
     }
     [self.hkStore executeQuery:query];
@@ -472,7 +472,7 @@
         }
     };
     
-    if (!self.hkStore) {
+    if (self.hkStore == nil) {
         self.hkStore = [[HKHealthStore alloc] init];
     }
     [self.hkStore executeQuery:query];
