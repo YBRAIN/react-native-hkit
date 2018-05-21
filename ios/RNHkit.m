@@ -107,7 +107,7 @@ RCT_REMAP_METHOD(getBiologicalSex, getBiologicalSex:(RCTPromiseResolveBlock)reso
         case HKBiologicalSexOther:      value = @"other";   break;
     }
     
-    if(!value) {
+    if(value == nil) {
         NSLog(@"error getting biological sex: %@", error);
         reject(@"no_datas", @"There were no datas", error);
         return;
@@ -153,7 +153,7 @@ RCT_REMAP_METHOD(getBloodType, getBloodType:(RCTPromiseResolveBlock)resolve reje
         case HKBloodTypeOPositive:  value = @"O+";      break;
         case HKBloodTypeONegative:  value = @"O-";      break;
     }
-    if(!value) {
+    if(value == nil) {
         NSLog(@"error getting blood type: %@", error);
         reject(@"no_datas", @"error getting blood type", error);
         return;
@@ -188,7 +188,7 @@ RCT_REMAP_METHOD(getFitzpatrickSkin, getFitzpatrickSkin:(RCTPromiseResolveBlock)
         case HKFitzpatrickSkinTypeV:        value = @"DarkBrown";   break;
         case HKFitzpatrickSkinTypeVI:       value = @"Black";       break;
     }
-    if(!value) {
+    if(value == nil) {
         NSLog(@"error getting FitzpatrickSkin: %@", error);
         reject(@"no_datas", @"There were no datas", error);
         return;
@@ -210,7 +210,7 @@ RCT_REMAP_METHOD(getWheelchairUse, getWheelchairUse:(RCTPromiseResolveBlock)reso
         case HKWheelchairUseNo:     value = @"No";      break;
         case HKWheelchairUseYes:    value = @"Yes";     break;
     }
-    if(!value) {
+    if(value == nil) {
         NSLog(@"error getting WheelchairUse: %@", error);
         reject(@"no_datas", @"There were no datas", error);
         return;
@@ -367,13 +367,14 @@ RCT_REMAP_METHOD(getDistanceWalkingRunningOnDay, getDistanceWalkingRunningOnDay:
         }
         if (!distance) {
             resolve(@[]);
+        } else {
+            NSDictionary *response = @{
+                                       @"value" : @(distance),
+                                       @"startDate" : [self buildISO8601StringFromDate:startDate],
+                                       @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                       };
+            resolve(@[response]);
         }
-        NSDictionary *response = @{
-                                   @"value" : @(distance),
-                                   @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                   @"endDate" : [self buildISO8601StringFromDate:endDate],
-                                   };
-        resolve(@[response]);
     }];
 }
 
@@ -391,13 +392,14 @@ RCT_REMAP_METHOD(getDistanceCyclingOnDay, getDistanceCyclingOnDay:(NSDictionary 
         }
         if (!distance) {
             resolve(@[]);
+        } else {
+            NSDictionary *response = @{
+                                       @"value" : @(distance),
+                                       @"startDate" : [self buildISO8601StringFromDate:startDate],
+                                       @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                       };
+            resolve(@[response]);
         }
-        NSDictionary *response = @{
-                                   @"value" : @(distance),
-                                   @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                   @"endDate" : [self buildISO8601StringFromDate:endDate],
-                                   };
-        resolve(@[response]);
     }];
 }
 
@@ -415,13 +417,14 @@ RCT_REMAP_METHOD(getFlightsClimbedOnDay, getFlightsClimbedOnDay:(NSDictionary *)
         }
         if (!count) {
             resolve(@[]);
+        } else {
+            NSDictionary *response = @{
+                                       @"value" : @(count),
+                                       @"startDate" : [self buildISO8601StringFromDate:startDate],
+                                       @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                       };
+            resolve(@[response]);
         }
-        NSDictionary *response = @{
-                                   @"value" : @(count),
-                                   @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                   @"endDate" : [self buildISO8601StringFromDate:endDate],
-                                   };
-        resolve(@[response]);
     }];
 }
 
@@ -442,13 +445,14 @@ RCT_REMAP_METHOD(getStepCountOnDay, getStepCountOnDay:(NSDictionary *)input reso
                                  }
                                  if (!value) {
                                      resolve(@[]);
+                                 } else {
+                                     NSDictionary *response = @{
+                                                                @"value" : @(value),
+                                                                @"startDate" : [self buildISO8601StringFromDate:startDate],
+                                                                @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                                                };
+                                     resolve(@[response]);
                                  }
-                                 NSDictionary *response = @{
-                                                            @"value" : @(value),
-                                                            @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                                            @"endDate" : [self buildISO8601StringFromDate:endDate],
-                                                            };
-                                 resolve(@[response]);
                              }];
 }
 
