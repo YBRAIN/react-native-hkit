@@ -910,7 +910,7 @@ RCT_REMAP_METHOD(saveSteps, saveSteps:(NSDictionary *)input resolver:(RCTPromise
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
     dateFormatter.locale = posix;
-    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.zzzz";
+    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.'Z'";
     return [dateFormatter dateFromString:date];
 }
 
@@ -918,7 +918,7 @@ RCT_REMAP_METHOD(saveSteps, saveSteps:(NSDictionary *)input resolver:(RCTPromise
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
     dateFormatter.locale = posix;
-    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.zzzz";
+    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.'Z'";
     return [dateFormatter stringFromDate:date];
 }
 

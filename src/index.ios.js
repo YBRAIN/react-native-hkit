@@ -14,7 +14,7 @@ export default {
     Units: Units,
 
     isAvailable() {
-        HealthKit.isAvailable((error, available) => {
+        HealthKit.isAvailable((error: Object, available: boolean) => {
             return available;
         });
     },
