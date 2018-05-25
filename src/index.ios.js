@@ -13,8 +13,10 @@ export default {
     Permissions: Permissions,
     Units: Units,
 
-    async isAvailable(): Promise<boolean> {
-        return HealthKit.isAvailable();
+    isAvailable() {
+        HealthKit.isAvailable((error, available) => {
+            return available;
+        });
     },
 
     async requestPermission(readOption: JSON): Promise<void> {

@@ -8,13 +8,13 @@
 
 RCT_EXPORT_MODULE(hkit);
 
-RCT_REMAP_METHOD(isAvailable, isAvailable:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(isAvailable:(RCTResponseSenderBlock)callback)
 {
     BOOL isAvailable = NO;
     if ([HKHealthStore isHealthDataAvailable]) {
         isAvailable = YES;
     }
-    resolve(@(isAvailable));
+    callback(@[[NSNull null], @(isAvailable)]);
 }
 
 RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
