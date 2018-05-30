@@ -49,7 +49,7 @@
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
     dateFormatter.locale = posix;
-    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSSZ";
+    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.Z";
     return [dateFormatter stringFromDate:date];
 }
 
