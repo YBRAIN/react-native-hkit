@@ -316,8 +316,8 @@ RCT_REMAP_METHOD(getLatestLeanBodyMass, getLatestLeanBodyMass:(RCTPromiseResolve
                                            double leanBodyMass = [mostRecentQuantity doubleValueForUnit:unit];
                                            NSDictionary *response = @{
                                                                       @"value" : @(leanBodyMass),
-                                                                      @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                                                      @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                                                      @"startDate" : [self parseUnixTimestampFromDate:startDate],
+                                                                      @"endDate" : [self parseUnixTimestampFromDate:endDate],
                                                                       };
                                            
                                            resolve(@[response]);
@@ -344,8 +344,8 @@ RCT_REMAP_METHOD(getLatestBodyFatPercentage, getLatestBodyFatPercentage:(RCTProm
                                            percentage = percentage * 100;
                                            NSDictionary *response = @{
                                                                       @"value" : @(percentage),
-                                                                      @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                                                      @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                                                      @"startDate" : [self parseUnixTimestampFromDate:startDate],
+                                                                      @"endDate" : [self parseUnixTimestampFromDate:endDate],
                                                                       };
                                            
                                            resolve(@[response]);
@@ -370,8 +370,8 @@ RCT_REMAP_METHOD(getDistanceWalkingRunningOnDay, getDistanceWalkingRunningOnDay:
         } else {
             NSDictionary *response = @{
                                        @"value" : @(distance),
-                                       @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                       @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                       @"startDate" : [self parseUnixTimestampFromDate:startDate],
+                                       @"endDate" : [self parseUnixTimestampFromDate:endDate],
                                        };
             resolve(@[response]);
         }
@@ -395,8 +395,8 @@ RCT_REMAP_METHOD(getDistanceCyclingOnDay, getDistanceCyclingOnDay:(NSDictionary 
         } else {
             NSDictionary *response = @{
                                        @"value" : @(distance),
-                                       @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                       @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                       @"startDate" : [self parseUnixTimestampFromDate:startDate],
+                                       @"endDate" : [self parseUnixTimestampFromDate:endDate],
                                        };
             resolve(@[response]);
         }
@@ -420,8 +420,8 @@ RCT_REMAP_METHOD(getFlightsClimbedOnDay, getFlightsClimbedOnDay:(NSDictionary *)
         } else {
             NSDictionary *response = @{
                                        @"value" : @(count),
-                                       @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                       @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                       @"startDate" : [self parseUnixTimestampFromDate:startDate],
+                                       @"endDate" : [self parseUnixTimestampFromDate:endDate],
                                        };
             resolve(@[response]);
         }
@@ -448,8 +448,8 @@ RCT_REMAP_METHOD(getStepCountOnDay, getStepCountOnDay:(NSDictionary *)input reso
                                  } else {
                                      NSDictionary *response = @{
                                                                 @"value" : @(value),
-                                                                @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                                                @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                                                @"startDate" : [self parseUnixTimestampFromDate:startDate],
+                                                                @"endDate" : [self parseUnixTimestampFromDate:endDate],
                                                                 };
                                      resolve(@[response]);
                                  }
@@ -905,7 +905,25 @@ RCT_REMAP_METHOD(saveSteps, saveSteps:(NSDictionary *)input resolver:(RCTPromise
     return dispatch_get_main_queue();
 }
 
+- (void)GetCurrentTimeStamp
+{
+    NSDateFormatter *objDateformat = [[NSDateFormatter alloc] init];
+    [objDateformat setDateFormat:@"yyyy-MM-dd"];
+    NSString    *strTime = [objDateformat stringFromDate:[NSDate date]];
+    NSString    *strUTCTime = [self GetUTCDateTimeFromLocalTime:strTime];//You can pass your date but be carefull about your date format of NSDateFormatter.
+    NSDate *objUTCDate  = [objDateformat dateFromString:strUTCTime];
+    long long milliseconds = (long long)([objUTCDate timeIntervalSince1970] * 1000.0);
+    
+    NSString *strTimeStamp = [Nsstring stringwithformat:@"%lld",milliseconds];
+    NSLog(@"The Timestamp is = %@",strTimestamp);
+}
 // Date Utils
+
+- (NSString *)parseUnixTimestampFromDate:(NSDate *)date {
+    long long milliseconds = (long long)([date timeIntervalSince1970] * 1000.0);
+    return [Nsstring stringwithformat:@"%lld",milliseconds];
+}
+
 - (NSDate *)parseISO8601DateFromString:(NSString *)date {
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
