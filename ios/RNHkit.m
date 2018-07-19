@@ -238,8 +238,8 @@ RCT_REMAP_METHOD(getLatestHeight, getLatestHeight:(RCTPromiseResolveBlock)resolv
                                            double height = [mostRecentQuantity doubleValueForUnit:unit];
                                            NSDictionary *response = @{
                                                                       @"value" : @(height),
-                                                                      @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                                                      @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                                                      @"startDate" : [self parseUnixTimestampFromDate:startDate],
+                                                                      @"endDate" : [self parseUnixTimestampFromDate:endDate],
                                                                       };
                                            resolve(@[response]);
                                        }
@@ -264,8 +264,8 @@ RCT_REMAP_METHOD(getLatestWeight, getLatestWeight:(RCTPromiseResolveBlock)resolv
                                            double usersWeight = [mostRecentQuantity doubleValueForUnit:unit];
                                            NSDictionary *response = @{
                                                                       @"value" : @(usersWeight),
-                                                                      @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                                                      @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                                                      @"startDate" : [self parseUnixTimestampFromDate:startDate],
+                                                                      @"endDate" : [self parseUnixTimestampFromDate:endDate],
                                                                       };
                                            resolve(@[response]);
                                        }
@@ -290,8 +290,8 @@ RCT_REMAP_METHOD(getLatestBodyMassIndex, getLatestBodyMassIndex:(RCTPromiseResol
                                            double bmi = [mostRecentQuantity doubleValueForUnit:unit];
                                            NSDictionary *response = @{
                                                                       @"value" : @(bmi),
-                                                                      @"startDate" : [self buildISO8601StringFromDate:startDate],
-                                                                      @"endDate" : [self buildISO8601StringFromDate:endDate],
+                                                                      @"startDate" : [self parseUnixTimestampFromDate:startDate],
+                                                                      @"endDate" : [self parseUnixTimestampFromDate:endDate],
                                                                       };
                                            
                                            resolve(@[response]);
