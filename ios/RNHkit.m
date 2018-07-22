@@ -225,7 +225,7 @@ RCT_REMAP_METHOD(getLatestHeight, getLatestHeight:(RCTPromiseResolveBlock)resolv
     HKUnit *unit = [HKUnit meterUnit];
     [self fetchMostRecentQuantitySampleOfType:heightType
                                     predicate:nil
-                                   completion:^(HKQuantity *mostRecentQuantity, NSDate *startDate, NSDate *endDate, NSError *error) {
+                                   completion:^(HKQuantity *mostRecentQuantity, NSString *startDate, NSString *endDate, NSError *error) {
                                        if (error) {
                                            NSLog(@"error getting latest height: %@", error);
                                            reject(@"getLatestHeight", @"error getting latest height", error);
@@ -238,8 +238,8 @@ RCT_REMAP_METHOD(getLatestHeight, getLatestHeight:(RCTPromiseResolveBlock)resolv
                                            double height = [mostRecentQuantity doubleValueForUnit:unit];
                                            NSDictionary *response = @{
                                                                       @"value" : @(height),
-                                                                      @"startDate" : [self parseUnixTimestampFromDate:startDate],
-                                                                      @"endDate" : [self parseUnixTimestampFromDate:endDate],
+                                                                      @"startDate" : startDate,
+                                                                      @"endDate" : endDate,
                                                                       };
                                            resolve(@[response]);
                                        }
@@ -251,7 +251,7 @@ RCT_REMAP_METHOD(getLatestWeight, getLatestWeight:(RCTPromiseResolveBlock)resolv
     HKUnit *unit = [HKUnit gramUnitWithMetricPrefix:HKMetricPrefixKilo];
     [self fetchMostRecentQuantitySampleOfType:weightType
                                     predicate:nil
-                                   completion:^(HKQuantity *mostRecentQuantity, NSDate *startDate, NSDate *endDate, NSError *error) {
+                                   completion:^(HKQuantity *mostRecentQuantity, NSString *startDate, NSString *endDate, NSError *error) {
                                        if (error) {
                                            NSLog(@"error getting latest Weight: %@", error);
                                            reject(@"getLatestWeight", @"error getting latest Weight", error);
@@ -264,8 +264,8 @@ RCT_REMAP_METHOD(getLatestWeight, getLatestWeight:(RCTPromiseResolveBlock)resolv
                                            double usersWeight = [mostRecentQuantity doubleValueForUnit:unit];
                                            NSDictionary *response = @{
                                                                       @"value" : @(usersWeight),
-                                                                      @"startDate" : [self parseUnixTimestampFromDate:startDate],
-                                                                      @"endDate" : [self parseUnixTimestampFromDate:endDate],
+                                                                      @"startDate" : startDate,
+                                                                      @"endDate" : endDate,
                                                                       };
                                            resolve(@[response]);
                                        }
@@ -277,7 +277,7 @@ RCT_REMAP_METHOD(getLatestBodyMassIndex, getLatestBodyMassIndex:(RCTPromiseResol
     HKUnit *unit = [HKUnit countUnit];
     [self fetchMostRecentQuantitySampleOfType:bmiType
                                     predicate:nil
-                                   completion:^(HKQuantity *mostRecentQuantity, NSDate *startDate, NSDate *endDate, NSError *error) {
+                                   completion:^(HKQuantity *mostRecentQuantity, NSString *startDate, NSString *endDate, NSError *error) {
                                        if (error) {
                                            NSLog(@"error getting latest BMI: %@", error);
                                            reject(@"getLatestBodyMassIndex", @"error getting latest BMI", error);
@@ -290,8 +290,8 @@ RCT_REMAP_METHOD(getLatestBodyMassIndex, getLatestBodyMassIndex:(RCTPromiseResol
                                            double bmi = [mostRecentQuantity doubleValueForUnit:unit];
                                            NSDictionary *response = @{
                                                                       @"value" : @(bmi),
-                                                                      @"startDate" : [self parseUnixTimestampFromDate:startDate],
-                                                                      @"endDate" : [self parseUnixTimestampFromDate:endDate],
+                                                                      @"startDate" : startDate,
+                                                                      @"endDate" : endDate,
                                                                       };
                                            
                                            resolve(@[response]);
@@ -304,7 +304,7 @@ RCT_REMAP_METHOD(getLatestLeanBodyMass, getLatestLeanBodyMass:(RCTPromiseResolve
     HKUnit *unit = [HKUnit poundUnit];
     [self fetchMostRecentQuantitySampleOfType:leanBodyMassType
                                     predicate:nil
-                                   completion:^(HKQuantity *mostRecentQuantity, NSDate *startDate, NSDate *endDate, NSError *error) {
+                                   completion:^(HKQuantity *mostRecentQuantity, NSString *startDate, NSString *endDate, NSError *error) {
                                        if (error) {
                                            NSLog(@"error getting latest lean body mass: %@", error);
                                            reject(@"getLatestLeanBodyMass", @"error getting latest lean body mass", error);
@@ -316,8 +316,8 @@ RCT_REMAP_METHOD(getLatestLeanBodyMass, getLatestLeanBodyMass:(RCTPromiseResolve
                                            double leanBodyMass = [mostRecentQuantity doubleValueForUnit:unit];
                                            NSDictionary *response = @{
                                                                       @"value" : @(leanBodyMass),
-                                                                      @"startDate" : [self parseUnixTimestampFromDate:startDate],
-                                                                      @"endDate" : [self parseUnixTimestampFromDate:endDate],
+                                                                      @"startDate" : startDate,
+                                                                      @"endDate" : endDate,
                                                                       };
                                            
                                            resolve(@[response]);
@@ -330,7 +330,7 @@ RCT_REMAP_METHOD(getLatestBodyFatPercentage, getLatestBodyFatPercentage:(RCTProm
     HKUnit *unit = [HKUnit percentUnit];
     [self fetchMostRecentQuantitySampleOfType:bodyFatPercentType
                                     predicate:nil
-                                   completion:^(HKQuantity *mostRecentQuantity, NSDate *startDate, NSDate *endDate, NSError *error) {
+                                   completion:^(HKQuantity *mostRecentQuantity, NSString *startDate, NSString *endDate, NSError *error) {
                                        if (error) {
                                            NSLog(@"error getting latest body fat percentage: %@", error);
                                            reject(@"getLatestBodyFatPercentage", @"error getting latest body fat percentage", error);
@@ -344,10 +344,9 @@ RCT_REMAP_METHOD(getLatestBodyFatPercentage, getLatestBodyFatPercentage:(RCTProm
                                            percentage = percentage * 100;
                                            NSDictionary *response = @{
                                                                       @"value" : @(percentage),
-                                                                      @"startDate" : [self parseUnixTimestampFromDate:startDate],
-                                                                      @"endDate" : [self parseUnixTimestampFromDate:endDate],
+                                                                      @"startDate" : startDate,
+                                                                      @"endDate" : endDate,
                                                                       };
-                                           
                                            resolve(@[response]);
                                        }
                                    }];
@@ -359,7 +358,7 @@ RCT_REMAP_METHOD(getDistanceWalkingRunningOnDay, getDistanceWalkingRunningOnDay:
     NSString *strDate = [input objectForKey:@"date"];
     NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate date];
     
-    [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double distance, NSDate *startDate, NSDate *endDate, NSError *error) {
+    [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double distance, NSString *startDate, NSString *endDate, NSError *error) {
         if (error) {
             NSLog(@"ERROR getting DistanceWalkingRunning: %@", error);
             reject(@"getDistanceWalkingRunningOnDay", @"ERROR getting DistanceWalkingRunning", error);
@@ -370,8 +369,8 @@ RCT_REMAP_METHOD(getDistanceWalkingRunningOnDay, getDistanceWalkingRunningOnDay:
         } else {
             NSDictionary *response = @{
                                        @"value" : @(distance),
-                                       @"startDate" : [self parseUnixTimestampFromDate:startDate],
-                                       @"endDate" : [self parseUnixTimestampFromDate:endDate],
+                                       @"startDate" : startDate,
+                                       @"endDate" : endDate,
                                        };
             resolve(@[response]);
         }
@@ -384,7 +383,7 @@ RCT_REMAP_METHOD(getDistanceCyclingOnDay, getDistanceCyclingOnDay:(NSDictionary 
     NSString *strDate = [input objectForKey:@"date"];
     NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate date];
     
-    [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double distance, NSDate *startDate, NSDate *endDate, NSError *error) {
+    [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double distance, NSString *startDate, NSString *endDate, NSError *error) {
         if (error) {
             NSLog(@"ERROR getting DistanceCycling: %@", error);
             reject(@"getDistanceCyclingOnDay", @"ERROR getting DistanceCycling", error);
@@ -395,8 +394,8 @@ RCT_REMAP_METHOD(getDistanceCyclingOnDay, getDistanceCyclingOnDay:(NSDictionary 
         } else {
             NSDictionary *response = @{
                                        @"value" : @(distance),
-                                       @"startDate" : [self parseUnixTimestampFromDate:startDate],
-                                       @"endDate" : [self parseUnixTimestampFromDate:endDate],
+                                       @"startDate" : startDate,
+                                       @"endDate" : endDate,
                                        };
             resolve(@[response]);
         }
@@ -409,7 +408,7 @@ RCT_REMAP_METHOD(getFlightsClimbedOnDay, getFlightsClimbedOnDay:(NSDictionary *)
     NSString *strDate = [input objectForKey:@"date"];
     NSDate *date = strDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strDate.doubleValue)] : [NSDate date];
     
-    [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double count, NSDate *startDate, NSDate *endDate, NSError *error) {
+    [self fetchSumOfSamplesOnDayForType:quantityType unit:unit day:date completion:^(double count, NSString *startDate, NSString *endDate, NSError *error) {
         if (error) {
             NSLog(@"ERROR getting FlightsClimbed: %@", error);
             reject(@"getFlightsClimbedOnDay", @"ERROR getting FlightsClimbed", error);
@@ -420,8 +419,8 @@ RCT_REMAP_METHOD(getFlightsClimbedOnDay, getFlightsClimbedOnDay:(NSDictionary *)
         } else {
             NSDictionary *response = @{
                                        @"value" : @(count),
-                                       @"startDate" : [self parseUnixTimestampFromDate:startDate],
-                                       @"endDate" : [self parseUnixTimestampFromDate:endDate],
+                                       @"startDate" : startDate,
+                                       @"endDate" : endDate,
                                        };
             resolve(@[response]);
         }
@@ -437,7 +436,7 @@ RCT_REMAP_METHOD(getStepCountOnDay, getStepCountOnDay:(NSDictionary *)input reso
     [self fetchSumOfSamplesOnDayForType:stepCountType
                                    unit:stepsUnit
                                     day:date
-                             completion:^(double value, NSDate *startDate, NSDate *endDate, NSError *error) {
+                             completion:^(double value, NSString *startDate, NSString *endDate, NSError *error) {
                                  if (error) {
                                      NSLog(@"could not fetch step count for day: %@", error);
                                      reject(@"getStepCountOnDay", @"could not fetch step count for day", error);
@@ -448,8 +447,8 @@ RCT_REMAP_METHOD(getStepCountOnDay, getStepCountOnDay:(NSDictionary *)input reso
                                  } else {
                                      NSDictionary *response = @{
                                                                 @"value" : @(value),
-                                                                @"startDate" : [self parseUnixTimestampFromDate:startDate],
-                                                                @"endDate" : [self parseUnixTimestampFromDate:endDate],
+                                                                @"startDate" : startDate,
+                                                                @"endDate" : endDate,
                                                                 };
                                      resolve(@[response]);
                                  }
@@ -711,15 +710,15 @@ RCT_REMAP_METHOD(getBloodPressureSamples, getBloodPressureSamples:(NSDictionary 
 //    HKQuantityType *bloodPressureCorrelationType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierRespiratoryRate];
 //    HKQuantityType *systolicType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic];
 //    HKQuantityType *diastolicType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic];
-//    
+//
 //    NSString *strUnit = [input objectForKey:@"unit"];
 //    NSNumber *numLimit = [input objectForKey:@"limit"];
 //    NSNumber *numBool = [input objectForKey:@"ascending"];
-//    
+//
 //    HKUnit *unit = strUnit != nil ? [HKUnit unitFromString:strUnit] : [HKUnit millimeterOfMercuryUnit];
 //    NSUInteger limit = numLimit != nil ? [numLimit unsignedIntValue] : HKObjectQueryNoLimit;
 //    BOOL ascending = numBool != nil ? [numBool boolValue] : false;
-//    
+//
 //    NSString *strStartDate = [input objectForKey:@"startDate"];
 //    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
 //    if(startDate == nil) {
@@ -728,9 +727,9 @@ RCT_REMAP_METHOD(getBloodPressureSamples, getBloodPressureSamples:(NSDictionary 
 //    }
 //    NSString *strEndDate = [input objectForKey:@"endDate"];
 //    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
-//    
+//
 //    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
-//    
+//
 //    [self fetchCorrelationSamplesOfType:bloodPressureCorrelationType
 //                                   unit:unit
 //                              predicate:predicate
@@ -903,41 +902,6 @@ RCT_REMAP_METHOD(saveSteps, saveSteps:(NSDictionary *)input resolver:(RCTPromise
 
 - (dispatch_queue_t)methodQueue {
     return dispatch_get_main_queue();
-}
-
-- (void)GetCurrentTimeStamp
-{
-    NSDateFormatter *objDateformat = [[NSDateFormatter alloc] init];
-    [objDateformat setDateFormat:@"yyyy-MM-dd"];
-    NSString    *strTime = [objDateformat stringFromDate:[NSDate date]];
-    NSString    *strUTCTime = [self GetUTCDateTimeFromLocalTime:strTime];//You can pass your date but be carefull about your date format of NSDateFormatter.
-    NSDate *objUTCDate  = [objDateformat dateFromString:strUTCTime];
-    long long milliseconds = (long long)([objUTCDate timeIntervalSince1970] * 1000.0);
-    
-    NSString *strTimeStamp = [Nsstring stringwithformat:@"%lld",milliseconds];
-    NSLog(@"The Timestamp is = %@",strTimestamp);
-}
-// Date Utils
-
-- (NSString *)parseUnixTimestampFromDate:(NSDate *)date {
-    long long milliseconds = (long long)([date timeIntervalSince1970] * 1000.0);
-    return [Nsstring stringwithformat:@"%lld",milliseconds];
-}
-
-- (NSDate *)parseISO8601DateFromString:(NSString *)date {
-    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
-    dateFormatter.locale = posix;
-    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.'Z'";
-    return [dateFormatter dateFromString:date];
-}
-
-- (NSString *)buildISO8601StringFromDate:(NSDate *)date {
-    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
-    dateFormatter.locale = posix;
-    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.'Z'";
-    return [dateFormatter stringFromDate:date];
 }
 
 @end

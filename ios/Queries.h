@@ -12,7 +12,7 @@
 
 - (void)fetchMostRecentQuantitySampleOfType:(HKQuantityType *)quantityType
                                   predicate:(NSPredicate *)predicate
-                                 completion:(void (^)(HKQuantity *mostRecentQuantity, NSDate *startDate, NSDate *endDate, NSError *error))completion;
+                                 completion:(void (^)(HKQuantity *mostRecentQuantity, NSString *startDateTimestamp, NSString *endDateTimestamp, NSError *error))completion;
 
 - (void)fetchSumOfSamplesTodayForType:(HKQuantityType *)quantityType
                                  unit:(HKUnit *)unit
@@ -21,7 +21,7 @@
 - (void)fetchSumOfSamplesOnDayForType:(HKQuantityType *)quantityType
                                  unit:(HKUnit *)unit
                                   day:(NSDate *)day
-                           completion:(void (^)(double, NSDate *, NSDate *, NSError *))completionHandler;
+                           completion:(void (^)(double, NSString *, NSString *, NSError *))completionHandler;
 
 - (void)fetchCumulativeSumStatisticsCollection:(HKQuantityType *)quantityType
                                           unit:(HKUnit *)unit

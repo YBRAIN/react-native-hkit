@@ -7,6 +7,7 @@
 //
 
 #import "Queries.h"
+@import Foundation;
 
 @implementation RNHkit (Queries)
 
@@ -38,6 +39,32 @@
     }
 }
 
+// Date Utils
+- (NSString *)parseUnixTimestampStringFromDate:(NSDate *)date {
+    long long milliseconds = (long long)([date timeIntervalSince1970] * 1000.0);
+    return [NSString stringWithFormat:@"%lld", milliseconds];
+}
+
+- (NSNumber *)parseUnixTimestampFromDate:(NSDate *)date {
+    return [NSNumber numberWithLongLong:(long long)([date timeIntervalSince1970] * 1000.0)];
+}
+
+- (NSDate *)parseISO8601DateFromString:(NSString *)date {
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormatter.locale = posix;
+    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ssZ";
+    return [dateFormatter dateFromString:date];
+}
+
+- (NSString *)buildISO8601StringFromDate:(NSDate *)date {
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormatter.locale = posix;
+    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ssZ";
+    return [dateFormatter stringFromDate:date];
+}
+
 - (NSPredicate *)predicateForSamplesOnDay:(NSDate *)date {
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDate *startDate = [calendar startOfDayForDate:date];
@@ -45,20 +72,12 @@
     return [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
 }
 
-- (NSString *)buildISO8601StringFromDate:(NSDate *)date {
-    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
-    dateFormatter.locale = posix;
-    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.Z";
-    return [dateFormatter stringFromDate:date];
-}
-
 
 // implementation
 
 - (void)fetchMostRecentQuantitySampleOfType:(HKQuantityType *)quantityType
                                   predicate:(NSPredicate *)predicate
-                                 completion:(void (^)(HKQuantity *, NSDate *, NSDate *, NSError *))completion {
+                                 completion:(void (^)(HKQuantity *, NSString *, NSString *, NSError *))completion {
     if (!completion) {
         return;
     }
@@ -77,8 +96,8 @@
                                 } else {
                                     HKQuantitySample *quantitySample = results.firstObject;
                                     HKQuantity *quantity = quantitySample.quantity;
-                                    NSDate *startDate = quantitySample.startDate;
-                                    NSDate *endDate = quantitySample.endDate;
+                                    NSString *startDate = [self parseUnixTimestampStringFromDate:quantitySample.startDate];
+                                    NSString *endDate = [self parseUnixTimestampStringFromDate:quantitySample.endDate];
                                     completion(quantity, startDate, endDate, error);
                                 }
                             }
@@ -119,8 +138,8 @@
                     HKQuantity *quantity = sample.quantity;
                     double value = [quantity doubleValueForUnit:unit];
                     
-                    NSString *startDateString = [self buildISO8601StringFromDate:sample.startDate];
-                    NSString *endDateString = [self buildISO8601StringFromDate:sample.endDate];
+                    NSString *startDateString = [self parseUnixTimestampStringFromDate:sample.startDate];
+                    NSString *endDateString = [self parseUnixTimestampStringFromDate:sample.endDate];
                     
                     NSDictionary *elem = @{
                                            @"value" : @(value),
@@ -179,8 +198,8 @@
                     // HKQuantity *quantity = sample.quantity;
                     // double value = [quantity doubleValueForUnit:unit];
                     
-                    NSString *startDateString = [self buildISO8601StringFromDate:sample.startDate];
-                    NSString *endDateString = [self buildISO8601StringFromDate:sample.endDate];
+                    NSString *startDateString = [self parseUnixTimestampStringFromDate:sample.startDate];
+                    NSString *endDateString = [self parseUnixTimestampStringFromDate:sample.endDate];
                     
                     NSString *valueString;
                     
@@ -267,8 +286,8 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 for (HKCorrelation *sample in results) {
-                    NSString *startDateString = [self buildISO8601StringFromDate:sample.startDate];
-                    NSString *endDateString = [self buildISO8601StringFromDate:sample.endDate];
+                    NSString *startDateString = [self parseUnixTimestampStringFromDate:sample.startDate];
+                    NSString *endDateString = [self parseUnixTimestampStringFromDate:sample.endDate];
                     
                     NSDictionary *elem = @{
                                            @"correlation" : sample,
@@ -322,7 +341,7 @@
 - (void)fetchSumOfSamplesOnDayForType:(HKQuantityType *)quantityType
                                  unit:(HKUnit *)unit
                                   day:(NSDate *)day
-                           completion:(void (^)(double, NSDate *, NSDate *, NSError *))completionHandler {
+                           completion:(void (^)(double, NSString *, NSString *, NSError *))completionHandler {
     
     NSPredicate *predicate = [self predicateForSamplesOnDay:day];
     HKStatisticsQuery *query = [[HKStatisticsQuery alloc] initWithQuantityType:quantityType
@@ -330,11 +349,11 @@
                                                                        options:HKStatisticsOptionCumulativeSum
                                                              completionHandler:^(HKStatisticsQuery *query, HKStatistics *result, NSError *error) {
                                                                  HKQuantity *sum = [result sumQuantity];
-                                                                 NSDate *startDate = result.startDate;
-                                                                 NSDate *endDate = result.endDate;
+                                                                 NSString *startDate = [self parseUnixTimestampStringFromDate:result.startDate];
+                                                                 NSString *endDate = [self parseUnixTimestampStringFromDate:result.endDate];
                                                                  if (completionHandler) {
                                                                      double value = [sum doubleValueForUnit:unit];
-                                                                     completionHandler(value,startDate, endDate, error);
+                                                                     completionHandler(value, startDate, endDate, error);
                                                                  }
                                                              }];
     
@@ -446,8 +465,8 @@
                                            NSDate *endDate = result.endDate;
                                            double value = [quantity doubleValueForUnit:unit];
                                            
-                                           NSString *startDateString = [self buildISO8601StringFromDate:startDate];
-                                           NSString *endDateString = [self buildISO8601StringFromDate:endDate];
+                                           NSString *startDateString = [self parseUnixTimestampStringFromDate:startDate];
+                                           NSString *endDateString = [self parseUnixTimestampStringFromDate:endDate];
                                            
                                            NSDictionary *elem = @{
                                                                   @"value" : @(value),
