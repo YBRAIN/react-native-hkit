@@ -53,10 +53,13 @@ RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input reso
                 return;
             } else {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                // A Boolean value that indicates whether the request was processed successfully.
+                // This value does not indicate whether permission was actually granted.
                     if (success) {
                         resolve(@(true));
                     } else {
-                        resolve(false);
+                    // request processed is fail. just request fail.
+                        resolve(@(false));
                     }
                 });
             }
