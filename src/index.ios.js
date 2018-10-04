@@ -96,8 +96,5 @@ export default {
     async getBodyTemperatureSamples(readOption: JSON): Promise<void> {
         return HealthKit.getBodyTemperatureSamples(readOption);
     },
-//    async getRespiratoryRateSamples(readOption: JSON): Promise<void> {
-//        return HealthKit.getRespiratoryRateSamples(readOption);
-//    },
 
 };

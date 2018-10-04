@@ -709,62 +709,6 @@ RCT_REMAP_METHOD(getBloodPressureSamples, getBloodPressureSamples:(NSDictionary 
                           }];
 }
 
-//RCT_REMAP_METHOD(getRespiratoryRateSamples, getRespiratoryRateSamples:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-//    HKQuantityType *bloodPressureCorrelationType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierRespiratoryRate];
-//    HKQuantityType *systolicType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic];
-//    HKQuantityType *diastolicType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic];
-//
-//    NSString *strUnit = [input objectForKey:@"unit"];
-//    NSNumber *numLimit = [input objectForKey:@"limit"];
-//    NSNumber *numBool = [input objectForKey:@"ascending"];
-//
-//    HKUnit *unit = strUnit != nil ? [HKUnit unitFromString:strUnit] : [HKUnit millimeterOfMercuryUnit];
-//    NSUInteger limit = numLimit != nil ? [numLimit unsignedIntValue] : HKObjectQueryNoLimit;
-//    BOOL ascending = numBool != nil ? [numBool boolValue] : false;
-//
-//    NSString *strStartDate = [input objectForKey:@"startDate"];
-//    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
-//    if(startDate == nil) {
-//        reject(@"getRespiratoryRateSamples fail", @"startDate is required in options", nil);
-//        return;
-//    }
-//    NSString *strEndDate = [input objectForKey:@"endDate"];
-//    NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
-//
-//    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
-//
-//    [self fetchCorrelationSamplesOfType:bloodPressureCorrelationType
-//                                   unit:unit
-//                              predicate:predicate
-//                              ascending:ascending
-//                                  limit:limit
-//                             completion:^(NSArray *results, NSError *error) {
-//                                 if(error){
-//                                     NSLog(@"error getting RespiratoryRate samples: %@", error);
-//                                     reject(@"getRespiratoryRateSamples", @"error getting RespiratoryRate samples", error);
-//                                     return;
-//                                 }
-////                                 NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
-////                                 for (NSDictionary *sample in results) {
-////                                     HKCorrelation *bloodPressureValues = [sample valueForKey:@"correlation"];
-////
-////                                     HKQuantitySample *bloodPressureSystolicValue = [bloodPressureValues objectsForType:systolicType].anyObject;
-////                                     HKQuantitySample *bloodPressureDiastolicValue = [bloodPressureValues objectsForType:diastolicType].anyObject;
-////
-////                                     NSDictionary *elem = @{
-////                                                            @"value": @{
-////                                                                    @"bloodPressureSystolicValue" : @([bloodPressureSystolicValue.quantity doubleValueForUnit:unit]),
-////                                                                    @"bloodPressureDiastolicValue" : @([bloodPressureDiastolicValue.quantity doubleValueForUnit:unit])
-////                                                                    },
-////                                                            @"startDate" : [sample valueForKey:@"startDate"],
-////                                                            @"endDate" : [sample valueForKey:@"endDate"],
-////                                                            };
-////                                     [data addObject:elem];
-////                                 }
-//                                 resolve(results);
-//                             }];
-//}
-
 RCT_REMAP_METHOD(getBodyTemperatureSamples, getBodyTemperatureSamples:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     HKQuantityType *respiratoryRateType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierRespiratoryRate];
     
