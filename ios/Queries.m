@@ -421,6 +421,60 @@
     [self.hkStore executeQuery:query];
 }
 
+- (void)fetchStatisticsCollectionForQuantityType:(HKQuantityType *)qauntityType
+                                            unit:(HKUnit *)unit
+                                       startDate:(NSDate *)startDate
+                                         endDate:(NSDate *)endDate
+                                        interval:(NSDateComponents *)interval
+                                      completion:(void (^)(NSArray *, NSError *))completionHandler {
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *anchorComponents = [calendar components:NSCalendarUnitHour | NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:startDate];
+    anchorComponents.minute = 0;
+    NSDate *anchorDate = [calendar dateFromComponents:anchorComponents];
+    
+    HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:qauntityType
+                                                                           quantitySamplePredicate:nil
+                                                                                           options:HKStatisticsOptionCumulativeSum
+                                                                                        anchorDate:anchorDate
+                                                                                intervalComponents:interval];
+    
+    query.initialResultsHandler = ^(HKStatisticsCollectionQuery * _Nonnull query, HKStatisticsCollection * _Nullable result, NSError * _Nullable error) {
+        if (error) {
+            // Perform proper error handling here
+            NSLog(@"*** An error occurred while calculating the statistics: %@ ***", error.localizedDescription);
+        }
+        
+        NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
+        
+        [result enumerateStatisticsFromDate:startDate toDate:endDate withBlock:^(HKStatistics * _Nonnull result, BOOL * _Nonnull stop) {
+            HKQuantity *quantity = result.sumQuantity;
+            if (quantity) {
+                NSDate *startDate = result.startDate;
+                NSDate *endDate = result.endDate;
+                double value = [quantity doubleValueForUnit:unit];
+                
+                NSString *startDateString = [self parseUnixTimestampStringFromDate:startDate];
+                NSString *endDateString = [self parseUnixTimestampStringFromDate:endDate];
+                
+                NSDictionary *elem = @{
+                                       @"value" : @(value),
+                                       @"startDate" : startDateString,
+                                       @"endDate" : endDateString,
+                                       };
+                [data addObject:elem];
+            }
+        }];
+        
+        completionHandler(data, error);
+    };
+    
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
+    [self.hkStore executeQuery:query];
+}
+
 
 - (void)fetchCumulativeSumStatisticsCollection:(HKQuantityType *)quantityType
                                           unit:(HKUnit *)unit

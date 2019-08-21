@@ -71,6 +71,13 @@ typedef NS_ENUM(NSInteger, UnitTypeScalar) {
     percentUnit,
 };
 
+typedef NS_ENUM(NSInteger, QueryInterval) {
+    hourly = 0,
+    daily,
+    weekly,
+    monthly
+};
+
 - (NSDictionary *)unitStringDictionary {
     return @{
              @"grams": @"g",
@@ -116,10 +123,19 @@ typedef NS_ENUM(NSInteger, UnitTypeScalar) {
              };
 }
 
++ (NSDictionary *)intervalDict {
+    NSDictionary *intervals = @{
+                                @"hourly": @(hourly),
+                                @"daily": @(daily),
+                                @"weekly": @(weekly),
+                                @"monthly": @(monthly)
+                                };
+    return intervals;
+}
 
 #pragma mark - HealthKit Permissions
 
-+ (NSDictionary *)readPermissonsDict {
++ (NSDictionary *)readPermissionsDict {
     NSDictionary *readPerms = @{
                                 // Characteristic Identifiers
                                 @"DateOfBirth" : [HKObjectType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth],
@@ -159,7 +175,7 @@ typedef NS_ENUM(NSInteger, UnitTypeScalar) {
 }
 
 
-+ (NSDictionary *)writePermissonsDict {
++ (NSDictionary *)writePermissionsDict {
     NSDictionary *writePerms = @{
                                  // Body Measurements
                                  @"Height" : [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight],
@@ -225,7 +241,7 @@ typedef NS_ENUM(NSInteger, UnitTypeScalar) {
 
 // Returns HealthKit read permissions from options array
 - (NSSet *)getReadPermsFromOptions:(NSArray *)options {
-    NSDictionary *readPermDict = [RNHkit readPermissonsDict];
+    NSDictionary *readPermDict = [RNHkit readPermissionsDict];
     NSMutableSet *readPermSet = [NSMutableSet setWithCapacity:1];
     
     for(int i=0; i<[options count]; i++) {
@@ -241,7 +257,7 @@ typedef NS_ENUM(NSInteger, UnitTypeScalar) {
 
 // Returns HealthKit write permissions from options array
 - (NSSet *)getWritePermsFromOptions:(NSArray *)options {
-    NSDictionary *writePermDict = [RNHkit writePermissonsDict];
+    NSDictionary *writePermDict = [RNHkit writePermissionsDict];
     NSMutableSet *writePermSet = [NSMutableSet setWithCapacity:1];
     
     for(int i=0; i<[options count]; i++) {
@@ -252,6 +268,29 @@ typedef NS_ENUM(NSInteger, UnitTypeScalar) {
         }
     }
     return writePermSet;
+}
+
+- (NSDateComponents *)getIntervalFromString:(NSString *)intervalStr {
+    QueryInterval qInterval = [[[RNHkit intervalDict] objectForKey:intervalStr] integerValue];
+    NSDateComponents *interval = [[NSDateComponents alloc] init];
+    switch (qInterval) {
+        case hourly:
+            interval.hour = 1;
+            break;
+        case daily:
+            interval.day = 1;
+            break;
+        case weekly:
+            interval.day = 7;
+            break;
+        case monthly:
+            interval.month = 1;
+            break;
+        default:
+            interval.hour = 1;
+            break;
+    }
+    return interval;
 }
 
 @end

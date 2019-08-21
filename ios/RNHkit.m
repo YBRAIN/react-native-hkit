@@ -77,7 +77,7 @@ RCT_REMAP_METHOD(isPermissionAvailable, isPermissionAvailable:(NSString *)name r
     }
     if ([HKHealthStore isHealthDataAvailable]) {
         
-        NSDictionary *dicPermissons = [RNHkit readPermissonsDict];
+        NSDictionary *dicPermissons = [RNHkit readPermissionsDict];
         HKObjectType *val = [dicPermissons objectForKey:name];
         if(val != nil) {
             HKAuthorizationStatus state =  [self.hkStore authorizationStatusForType:val];
@@ -594,6 +594,40 @@ RCT_REMAP_METHOD(getDailyStepSamples, getDailyStepSamples:(NSDictionary *)input 
                                           }
                                           resolve(result);
                                       }];
+}
+
+RCT_REMAP_METHOD(getCumulativeStatisticsForType, getCumulativeStatisticsForType:(NSString *)type options:(NSDictionary *)readOptions resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    HKObjectType *quantityType = [[RNHkit readPermissionsDict] objectForKey:type];
+    if (quantityType != nil && [quantityType isKindOfClass:[HKQuantityType class]]) {
+        NSString *strUnit = [readOptions objectForKey:@"unit"];
+        HKUnit *unit;
+        @try {
+            unit = [HKUnit unitFromString:strUnit];
+        } @catch (NSException *exception) {
+            reject(@"getCumulativeStatisticsForType_invalidUnitString", @"Invalid unit string given. See https://developer.apple.com/documentation/healthkit/hkunit/1615733-unitfromstring?language=objc", nil);
+            return;
+        }
+        NSString *strStartDate = [readOptions objectForKey:@"startDate"];
+        NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
+        if(startDate == nil) {
+            reject(@"getCumulativeStatisticsForType fail", @"startDate is required in options", nil);
+            return;
+        }
+        NSString *strEndDate = [readOptions objectForKey:@"endDate"];
+        NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
+        
+        NSString *intervalStr = [readOptions objectForKey:@"interval"];
+        NSDateComponents *interval = [self getIntervalFromString:intervalStr];
+        
+        [self fetchStatisticsCollectionForQuantityType:(HKQuantityType *)quantityType unit:unit startDate:startDate endDate:endDate interval:interval completion:^(NSArray *results, NSError *error) {
+            if (error) {
+                NSLog(@"error getting heart rate samples: %@", error);
+                reject(@"getCumulativeStatisticsForType", @"error getting requested statistics collection", error);
+                return;
+            }
+            resolve(results);
+        }];
+    }
 }
 
 RCT_REMAP_METHOD(getHeartRateSamples, getHeartRateSamples:(NSDictionary *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {

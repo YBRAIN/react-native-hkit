@@ -96,5 +96,8 @@ export default {
     async getBodyTemperatureSamples(readOption: JSON): Promise<void> {
         return HealthKit.getBodyTemperatureSamples(readOption);
     },
+    async getCumulativeStatisticsForType(type: string, readOptions: JSON): Promise<void> {
+        return HealthKit.getCumulativeStatisticsForType(type, readOptions);
+    }
 
 };
