@@ -62,4 +62,9 @@
                                         limit:(NSUInteger)lim
                                    completion:(void (^)(NSArray *, NSError *))completion;
 
+- (void)fetchCumulativeDurationForQuantitySamplesOfType:(HKQuantityType *)quantityType
+                                              startDate:(NSDate *)startDate
+                                                endDate:(NSDate *)endDate
+                                             completion:(void (^)(double, NSError *))completionHandler;
+
 @end

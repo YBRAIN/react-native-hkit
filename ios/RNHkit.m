@@ -53,12 +53,12 @@ RCT_REMAP_METHOD(requestPermission, requestPermission:(NSDictionary *)input reso
                 return;
             } else {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                // A Boolean value that indicates whether the request was processed successfully.
-                // This value does not indicate whether permission was actually granted.
+                    // A Boolean value that indicates whether the request was processed successfully.
+                    // This value does not indicate whether permission was actually granted.
                     if (success) {
                         resolve(@(true));
                     } else {
-                    // request processed is fail. just request fail.
+                        // request processed is fail. just request fail.
                         resolve(@(false));
                     }
                 });
@@ -626,6 +626,29 @@ RCT_REMAP_METHOD(getCumulativeStatisticsForType, getCumulativeStatisticsForType:
                 return;
             }
             resolve(results);
+        }];
+    }
+}
+
+RCT_REMAP_METHOD(getTotalDurationForType, getTotalDurationForType:(NSString *)type options: (NSDictionary *)readOptions resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    HKObjectType *quantityType = [[RNHkit readPermissionsDict] objectForKey:type];
+    if (quantityType != nil && [quantityType isKindOfClass:[HKQuantityType class]]) {
+        NSString *strStartDate = [readOptions objectForKey:@"startDate"];
+        NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
+        if(startDate == nil) {
+            reject(@"getCumulativeStatisticsForType fail", @"startDate is required in options", nil);
+            return;
+        }
+        NSString *strEndDate = [readOptions objectForKey:@"endDate"];
+        NSDate *endDate = strEndDate != nil ? [NSDate dateWithTimeIntervalSince1970:(strEndDate.doubleValue)] : [NSDate new];
+        
+        [self fetchCumulativeDurationForQuantitySamplesOfType:(HKQuantityType *)quantityType startDate:startDate endDate:endDate completion:^(double duration, NSError *error) {
+            if (error) {
+                NSLog(@"error getting total duration for samples: %@", error);
+                reject(@"getTotalDurationForType", @"error getting total duration for samples", error);
+                return;
+            }
+            resolve(@(duration));
         }];
     }
 }

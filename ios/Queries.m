@@ -108,6 +108,28 @@
     [self.hkStore executeQuery:query];
 }
 
+- (void)fetchCumulativeDurationForQuantitySamplesOfType:(HKQuantityType *)quantityType
+                                              startDate:(NSDate *)startDate
+                                                endDate:(NSDate *)endDate
+                                             completion:(void (^)(double, NSError *))completionHandler {
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionNone];
+    HKSampleQuery *query = [[HKSampleQuery alloc] initWithSampleType:quantityType
+                                                           predicate:predicate
+                                                               limit:HKObjectQueryNoLimit
+                                                     sortDescriptors:nil
+                                                      resultsHandler:^(HKSampleQuery * _Nonnull query, NSArray<__kindof HKSample *> * _Nullable results, NSError * _Nullable error) {
+                                                          for (HKQuantitySample *sample in results) {
+                                                              NSDate *startDate = sample.startDate;
+                                                              NSDate *endDate = sample.endDate;
+                                                              NSUUID *uuid = sample.UUID;
+                                                          }
+                                                      }];
+    if (self.hkStore == nil) {
+        self.hkStore = [[HKHealthStore alloc] init];
+    }
+    [self.hkStore executeQuery:query];
+}
+
 
 - (void)fetchQuantitySamplesOfType:(HKQuantityType *)quantityType
                               unit:(HKUnit *)unit
