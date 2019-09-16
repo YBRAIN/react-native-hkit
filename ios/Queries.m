@@ -118,11 +118,16 @@
                                                                limit:HKObjectQueryNoLimit
                                                      sortDescriptors:nil
                                                       resultsHandler:^(HKSampleQuery * _Nonnull query, NSArray<__kindof HKSample *> * _Nullable results, NSError * _Nullable error) {
-                                                          for (HKQuantitySample *sample in results) {
-                                                              NSDate *startDate = sample.startDate;
-                                                              NSDate *endDate = sample.endDate;
-                                                              NSUUID *uuid = sample.UUID;
+                                                          double totalDuration = 0;
+                                                          if (results != nil) {
+                                                              NSSet *sampleSet = [NSSet setWithArray:results];
+                                                              for (HKQuantitySample *sample in sampleSet) {
+                                                                  NSDate *startDate = sample.startDate;
+                                                                  NSDate *endDate = sample.endDate;
+                                                                  totalDuration += [endDate timeIntervalSinceDate:startDate];
+                                                              }
                                                           }
+                                                          completionHandler(totalDuration, error);
                                                       }];
     if (self.hkStore == nil) {
         self.hkStore = [[HKHealthStore alloc] init];
