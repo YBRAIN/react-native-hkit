@@ -98,6 +98,9 @@ export default {
     },
     async getCumulativeStatisticsForType(type: string, readOptions: JSON): Promise<void> {
         return HealthKit.getCumulativeStatisticsForType(type, readOptions);
+    },
+    async getTotalDurationForType(type: string, readOptions: JSON): Promise<number> {
+        return HealthKit.getTotalDurationForType(type, readOptions);
     }
 
 };
