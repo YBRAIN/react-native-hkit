@@ -636,7 +636,7 @@ RCT_REMAP_METHOD(getTotalDurationForType, getTotalDurationForType:(NSString *)ty
         NSString *strStartDate = [readOptions objectForKey:@"startDate"];
         NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:(strStartDate.doubleValue)];
         if(startDate == nil) {
-            reject(@"getCumulativeStatisticsForType fail", @"startDate is required in options", nil);
+            reject(@"getTotalDurationForType fail", @"startDate is required in options", nil);
             return;
         }
         NSString *strEndDate = [readOptions objectForKey:@"endDate"];
