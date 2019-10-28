@@ -1,8 +1,8 @@
 // @flow
 
-import { NativeModules } from 'react-native';
-import { Permissions } from './Constants/Permissions'
-import { Units } from './Constants/Units'
+import {NativeModules} from 'react-native';
+import {Permissions} from './Constants/Permissions';
+import {Units} from './Constants/Units';
 
 const HealthKit = NativeModules.hkit;
 
@@ -13,10 +13,8 @@ export default {
     Permissions: Permissions,
     Units: Units,
 
-    isAvailable() {
-        HealthKit.isAvailable((error: Object, available: boolean) => {
-            return available;
-        });
+    isAvailable(): Promise<boolean> {
+        return new Promise(resolve => HealthKit.isAvailable((error: Object, available: boolean) => resolve(available)));
     },
 
     async requestPermission(readOption: JSON): Promise<void> {
@@ -55,7 +53,6 @@ export default {
         return HealthKit.getLatestBodyFatPercentage();
     },
 
-
     async getDistanceWalkingRunningOnDay(readOption: JSON): Promise<void> {
         return HealthKit.getDistanceWalkingRunningOnDay(readOption);
     },
@@ -68,7 +65,6 @@ export default {
     async getStepCountOnDay(readOption: JSON): Promise<void> {
         return HealthKit.getStepCountOnDay(readOption);
     },
-
 
     async getHeightSamples(readOption: JSON): Promise<void> {
         return HealthKit.getHeightSamples(readOption);
@@ -86,7 +82,6 @@ export default {
         return HealthKit.getHeartRateSamples(readOption);
     },
 
-
     async getBloodGlucoseSamples(readOption: JSON): Promise<void> {
         return HealthKit.getBloodGlucoseSamples(readOption);
     },
@@ -101,6 +96,6 @@ export default {
     },
     async getTotalDurationForType(type: string, readOptions: JSON): Promise<number> {
         return HealthKit.getTotalDurationForType(type, readOptions);
-    }
+    },
 
 };
