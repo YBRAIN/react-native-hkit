@@ -1,11 +1,3 @@
-//
-//  TypesAndPermissions.m
-//  RNHkit
-//
-//  Created by HoJun Lee on 2018. 4. 4..
-//  Copyright © 2018년 Facebook. All rights reserved.
-//
-
 #import "TypesAndPermissions.h"
 
 @implementation RNHkit (TypesAndPermissions)

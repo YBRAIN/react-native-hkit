@@ -1,4 +1,3 @@
-
 #import "RNHkit.h"
 #import "Queries.h"
 #import "TypesAndPermissions.h"
